@@ -17,6 +17,14 @@ public class Creature {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Creature(String string) {
+		this.name = string;
+	}
+	
+	public void setHealth(int health) {
+		this.health = health;
+	}
 
 
 	public void drawCreature(AsciiPanel terminal) {

@@ -1,10 +1,9 @@
 package roguelike;
 
 import javax.swing.JFrame;
-a
-import asciiPanel.AsciiPanel;
 
-import asciiPanel.AsciiFont;
+
+import asciiPanel.AsciiPanel;
 
 public class ApplicationMain extends JFrame {
     private static final long serialVersionUID = 1060623638149583738L;
@@ -14,7 +13,7 @@ public class ApplicationMain extends JFrame {
 
     public ApplicationMain(){
         super();
-        terminal = new AsciiPanel(200,50, AsciiFont.TALRYTH_15_15);
+        terminal = new AsciiPanel(200,50, TALRYTH_15_15);
         terminal.write("Roguelike", 1, 1);
         generate = new CreatureGenerator();
         generate.drawPlayer(terminal);
