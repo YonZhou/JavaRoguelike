@@ -1,4 +1,6 @@
 package roguelike;
+import asciiPanel.AsciiPanel;
+
 
 public class Tiles {
 	private char ID;
@@ -11,8 +13,8 @@ public class Tiles {
 		this.ID = id;
 	}
 	
-	public void render() {
-		
+	public void renderTile() {
+		terminal.write(this.ID, this.x, this.y);
 	}
 
 }
