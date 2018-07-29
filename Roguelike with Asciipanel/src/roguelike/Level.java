@@ -1,6 +1,7 @@
 package roguelike;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import asciiPanel.AsciiPanel;
 
@@ -8,23 +9,24 @@ import asciiPanel.AsciiPanel;
 public class Level {
 	public ArrayList<Tiles> tileList;
 	public ArrayList<Enemy> enemyList;
-	public ArrayList<Level> levels;
+	//public ArrayList<Level> levels; add this in another class
+	public Tiles[][] tileMap;
 	private String name;
 	
 	
-	public Level(String name) {
+	public Level(String name, Tiles[][] tilemap, ArrayList<Tiles> tilelist) {
 		this.name = name;
-		this.tileList = new ArrayList<Tiles>;
-		this.enemyList = new ArrayList<Enemy>;
-		levels.add(this);
+		this.tileMap = tilemap;
+		this.tileList = tilelist;
+		this.enemyList = new ArrayList<Enemy>();
 	}
 	
 	
 	
-	public void generateWorld(AsciiPanel panel) {
-		panel.clear();
+	public void drawLevel(AsciiPanel panel) {
+		
 		for(Tiles tile : this.tileList) {
-			tile.renderTile(panel);
+			tile.renderTile();
 		}
 	}
 

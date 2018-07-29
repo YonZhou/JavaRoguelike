@@ -6,17 +6,17 @@ import asciiPanel.AsciiPanel;
 import javax.swing.JFrame;
 
 public class Game extends JFrame{
-	private AsciiPanel panel;
+	private ApplicationMain a;
     private CreatureGenerator generate;
     private KeyHandler mainKeyListener;
     private Creature Player;
 	
-	public Game(AsciiPanel p) {
-		this.panel = p;
+	public Game(ApplicationMain a) {
+		this.a = a;
 		
 		generate = new CreatureGenerator(panel);
 		Player = generate.newPlayer();
-	    mainKeyListener = new KeyHandler(Player);
+	    mainKeyListener = new KeyHandler(Player, a);
 	    this.addKeyListener(mainKeyListener);
 	}
 	
