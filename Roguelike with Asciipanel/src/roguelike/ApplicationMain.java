@@ -14,7 +14,6 @@ public class ApplicationMain extends JFrame{
     private CreatureGenerator generate;
     private KeyHandler mainKeyListener;
     private Creature Player;
-    private Level currentLevel;
     
     public static final int TERMINAL_WIDTH = 100;
     public static final int TERMINAL_HEIGHT = 50;
@@ -22,12 +21,11 @@ public class ApplicationMain extends JFrame{
     public ApplicationMain() {
 	    //super();
 	    terminal = new AsciiPanel(TERMINAL_WIDTH,TERMINAL_HEIGHT,AsciiFont.TALRYTH_15_15);
-	    LevelGenerator l = new LevelGenerator(100, 100, terminal);
-	    Level currentLevel = l.generateLevel(1);
+	    LevelGenerator l = new LevelGenerator(terminal);
+	    Level currentLevel = l.generateLevel(1, 50, 50);
 //	    currentLevel.drawLevel(terminal);
-	    this.currentLevel = currentLevel;
 	    
-	    
+	    Level secondLevel = l.generateLevel(2, 100, 100);
 	    generate = new CreatureGenerator(terminal, currentLevel);
 	    //terminal.write("Roguelike", 1, 1);
 	    
@@ -35,7 +33,6 @@ public class ApplicationMain extends JFrame{
 	    Player.setCamera();
 	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
 	    Player.camera.renderCamera();
-	    
 	    
 	    mainKeyListener = new KeyHandler(Player, this);
 	    addKeyListener(mainKeyListener);

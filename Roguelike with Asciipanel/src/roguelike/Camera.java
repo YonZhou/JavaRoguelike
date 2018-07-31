@@ -82,5 +82,9 @@ public class Camera{
 	public int getY() {
 		return this.y;
 	}
+	
+	public void setLevel(Level l) {
+		this.l = l;
+	}
 
 }

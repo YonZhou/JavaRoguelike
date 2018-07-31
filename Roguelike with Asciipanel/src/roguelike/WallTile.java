@@ -7,8 +7,8 @@ import asciiPanel.AsciiPanel;
 public class WallTile extends Tiles{
 	private boolean iswalkable;
 
-	public WallTile(int x, int y, AsciiPanel terminal) {
-		super(x, y, '#', terminal, Color.WHITE, false);
+	public WallTile(int x, int y) {
+		super(x, y, '#', Color.WHITE, false);
 
 	}
 

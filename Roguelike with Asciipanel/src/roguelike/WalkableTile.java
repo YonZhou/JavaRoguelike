@@ -6,8 +6,8 @@ import asciiPanel.AsciiPanel;
 
 public class WalkableTile extends Tiles{
 
-	public WalkableTile(int x, int y, AsciiPanel terminal) {
-		super(x, y, '.', terminal, Color.DARK_GRAY, true);
+	public WalkableTile(int x, int y) {
+		super(x, y, '.', Color.DARK_GRAY, true);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -15,7 +15,7 @@ public class Creature extends Entity{
 	// add map
 	
 	public Creature(String string, int health, int level, char icon, int x, int y, AsciiPanel panel, Level l, Color c) {
-		super(icon, x, y, c, panel);
+		super(icon, x, y, c);
 		this.name = string;
 		this.health = health;
 		this.level = level;
@@ -32,6 +32,11 @@ public class Creature extends Entity{
 	
 	public void setCamera() {
 		this.camera = createCamera();
+	}
+	
+	public void setLevel(Level l) {
+		this.l = l;
+		this.camera.setLevel(l);
 	}
 
 	
@@ -50,14 +55,14 @@ public class Creature extends Entity{
 		}
 	}
 
-	public void drawCreature() {
-		super.drawEntity();
-		//panel.write(this.icon, this.x, this.y);
-	}
+//	public void drawCreature() {
+//		super.drawEntity();
+//		//panel.write(this.icon, this.x, this.y);
+//	}
 	
-	public void clearCreature() {
-		getPanel().write(' ', this.x, this.y);
-	}
+//	public void clearCreature() {
+//		getPanel().write(' ', this.x, this.y);
+//	}
 	
 //	public void moveAndDrawCreature(int dx, int dy) {
 //		this.clearCreature();
