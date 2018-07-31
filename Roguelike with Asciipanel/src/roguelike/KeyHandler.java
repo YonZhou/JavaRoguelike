@@ -15,17 +15,19 @@ public class KeyHandler implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent k) {
 		if(k.getKeyCode() == KeyEvent.VK_DOWN) {
-			p.moveAndDrawCreature(0, 1);
+			p.moveCreature(0, 1);
 		}
 		if(k.getKeyCode() == KeyEvent.VK_UP) {
-			p.moveAndDrawCreature(0, -1);
+			p.moveCreature(0, -1);
 		}
 		if(k.getKeyCode() == KeyEvent.VK_RIGHT) {
-			p.moveAndDrawCreature(1, 0);
+			p.moveCreature(1, 0);
 		}
 		if(k.getKeyCode() == KeyEvent.VK_LEFT) {
-			p.moveAndDrawCreature(-1, 0);
+			p.moveCreature(-1, 0);
 		}
+		
+		p.camera.renderCamera();
 		a.repaint();
         System.out.println(p.x);
         System.out.println(p.y);
