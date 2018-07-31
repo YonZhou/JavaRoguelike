@@ -8,7 +8,7 @@ public class WallTile extends Tiles{
 	private boolean iswalkable;
 
 	public WallTile(int x, int y) {
-		super(x, y, '#', Color.WHITE, false);
+		super(x, y, '#', Color.GRAY, false);
 
 	}
 

@@ -29,9 +29,14 @@ public class ApplicationMain extends JFrame{
 	    generate = new CreatureGenerator(terminal, currentLevel);
 	    //terminal.write("Roguelike", 1, 1);
 	    
+	    Level thirdLevel = l.generateRWalkLevel(1, 1000, 1000);
+	    
 	    Player = generate.newPlayer();
 	    Player.setCamera();
-	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
+	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 0);
+	    
+	    Player.setLevel(thirdLevel);
+	    
 	    Player.camera.renderCamera();
 	    
 	    mainKeyListener = new KeyHandler(Player, this);
@@ -48,7 +53,7 @@ public class ApplicationMain extends JFrame{
     
     @Override
     public void repaint() {
-    	//re-draw everything that will stay on screen
+    	//re-draw everything that will stay on screen(not needed anymore?)
 //	    currentLevel.drawLevel(terminal);
 	    //Player.drawCreature();
     	super.repaint();

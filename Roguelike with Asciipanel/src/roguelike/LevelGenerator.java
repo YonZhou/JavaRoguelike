@@ -50,19 +50,79 @@ public class LevelGenerator {
 		
 		generateRWalk(map, w, h);
 		
-		return null;
+		ArrayList<Tiles> tilelist = new ArrayList<Tiles>();
+		ArrayList<WalkableTile> walkabletilelist = new ArrayList<WalkableTile>();
 		
+		parseTileLists(map, tilelist, walkabletilelist);
+		
+		return new Level("test", map, tilelist, walkabletilelist, dif, width, height);
+	}
+	
+	public void parseTileLists(Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<WalkableTile> walkabletilelist) {
+		for(int i = 0; i< map.length; i++) {
+			for(int j = 0; j < map[0].length; j++) {
+				tilelist.add((Tiles) map[i][j]);
+				if(map[i][j] instanceof WalkableTile)
+					walkabletilelist.add((WalkableTile) map[i][j]);
+			}
+		}
 	}
 	
 	public void generateRWalk(Entity[][] map, int w, int h) {
-		
 		Random r = new Random();
-		int max = w*h;
+		int max = (int) (w*h*0.75);
 		int min = (int) (w*h*0.5);
 		
 		int numCells = r.nextInt(max - min + 1) + min;
 		
+		fillWithWalls(map, w, h);
 		
+		
+		int refX = r.nextInt(w);
+		int refY = r.nextInt(h);
+		
+		map[refX][refY] = new WalkableTile(refX, refY);
+		int i = 1;
+		
+		while(i < numCells) {
+			
+			int randomDir = r.nextInt(4) + 1;
+			
+			int tempX = refX;
+			int tempY = refY;
+			
+			if(randomDir == 1) {
+				refY -= 1;
+			} else if(randomDir == 2) {
+				refX += 1;
+			} else if(randomDir == 3) {
+				refY += 1;
+			} else {
+				refX -= 1;
+			}
+			
+			if(checkForBounds(refX, refY, w, h)) {
+				refX = tempX;
+				refY = tempY;
+			};
+			
+			if(map[refX][refY] instanceof WallTile) {
+				map[refX][refY] = new WalkableTile(refX, refY);
+				i++;
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	
+	public boolean checkForBounds(int refX, int refY, int w, int h) {
+		if(refX < 1 || refY < 1 || refX >= w - 1 || refY >= h - 1) {
+			return true;
+		}
+		return false;
 	}
 	
 	
