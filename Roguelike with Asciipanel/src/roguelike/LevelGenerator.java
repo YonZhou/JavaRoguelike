@@ -7,21 +7,20 @@ import java.util.Random;
 
 import asciiPanel.AsciiPanel;
 
+//generate map with tiles -> place creature -> place player
+
+//map is the main map which holds all the tiles. need new 2d for creatures(new layer)
+
 public class LevelGenerator {
 	private int height;
 	private int width;
-	private AsciiPanel panel;
 	public Entity[][] map;
 	private ArrayList<Rectangle> rectangleList;
 	public ArrayList<Tiles> tileslist;
-	public ArrayList<WalkableTile> walkabletileslist;
+	public ArrayList<Entity> freetilelist;
 
 	
-	public LevelGenerator(AsciiPanel panel) {
-		this.panel = panel;
-		this.rectangleList = new ArrayList<Rectangle>();
-		this.tileslist = new ArrayList<Tiles>();
-		this.walkabletileslist = new ArrayList<WalkableTile>();
+	public LevelGenerator() {
 		
 	}
 	
@@ -35,7 +34,7 @@ public class LevelGenerator {
 
 
 		
-		return new Level("test", map, tileslist, walkabletileslist, dif, width, height);
+		return new Level("test", map, tileslist, freetilelist, dif, width, height);
 	}
 	
 	
@@ -51,37 +50,41 @@ public class LevelGenerator {
 		generateRWalk(map, w, h);
 		
 		ArrayList<Tiles> tilelist = new ArrayList<Tiles>();
-		ArrayList<WalkableTile> walkabletilelist = new ArrayList<WalkableTile>();
+		ArrayList<Entity> freetilelist = new ArrayList<Entity>();
 		
-		parseTileLists(map, tilelist, walkabletilelist);
+		parseTileLists(map, tilelist, freetilelist);
 		
-		return new Level("test", map, tilelist, walkabletilelist, dif, width, height);
+		generateExitTile(map, tilelist, freetilelist);
+		
+		return new Level("test", map, tilelist, freetilelist, dif, width, height);
 	}
 	
-	public void parseTileLists(Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<WalkableTile> walkabletilelist) {
+	//add all entries of map to tilelist and walkabletilelist
+	public void parseTileLists(Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetilelist) {
 		for(int i = 0; i< map.length; i++) {
 			for(int j = 0; j < map[0].length; j++) {
 				tilelist.add((Tiles) map[i][j]);
 				if(map[i][j] instanceof WalkableTile)
-					walkabletilelist.add((WalkableTile) map[i][j]);
+					freetilelist.add((WalkableTile) map[i][j]);
 			}
 		}
 	}
 	
 	public void generateRWalk(Entity[][] map, int w, int h) {
 		Random r = new Random();
-		int max = (int) (w*h*0.75);
+		int max = (int) (w*h*0.7);
 		int min = (int) (w*h*0.5);
 		
 		int numCells = r.nextInt(max - min + 1) + min;
 		
 		fillWithWalls(map, w, h);
 		
-		
-		int refX = r.nextInt(w);
-		int refY = r.nextInt(h);
+		//TODO: make refX and refY need to be away from the walls and random
+		int refX = w / 2;
+		int refY = h / 2;
 		
 		map[refX][refY] = new WalkableTile(refX, refY);
+		
 		int i = 1;
 		
 		while(i < numCells) {
@@ -181,9 +184,30 @@ public class LevelGenerator {
 	
 	}
 	
-	public void generateWalls() {
+	public void generateEMPTY() {
 		Rectangle main = generateRectangle(map, tileslist, 0, 0, width, height);
 		fillRectangle(main);
+	}
+	
+	//put this function after the parse, as it needs to find an empty walkabletile on the TILELIST.
+	public void generateExitTile(Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetilelist) {
+		int max = freetilelist.size();
+		
+		Random r = new Random();
+		
+		int randomIndex = r.nextInt(max); //index of random freetile to write exit to
+		
+		WalkableTile wTile = (WalkableTile) freetilelist.get(randomIndex);
+		
+		int x = wTile.getx();
+		int y = wTile.gety();
+		
+		ExitTile exit = new ExitTile(x, y);
+		
+		map[x][y] = exit;
+		
+		freetilelist.remove(randomIndex);
+		tilelist.set(randomIndex, exit);
 	}
 	
 	public void fillRectangle(Rectangle r) {
@@ -191,7 +215,7 @@ public class LevelGenerator {
 			for(int h = r.topLeftY + 1; h < r.height - 1; h++) {
 				map[w][h] = new WalkableTile(w, h);
 				tileslist.add((Tiles) map[w][h]);
-				walkabletileslist.add((WalkableTile) map[w][h]);
+//				walkabletileslist.add((WalkableTile) map[w][h]);
 			}
 		}
 	}

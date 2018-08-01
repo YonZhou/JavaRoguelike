@@ -14,24 +14,22 @@ public class Creature extends Entity{
 	public Camera camera;
 	// add map
 	
-	public Creature(String string, int health, int level, char icon, int x, int y, AsciiPanel panel, Level l, Color c) {
+	public Creature(String string, int health, int level, char icon, int x, int y, Color c) {
 		super(icon, x, y, c);
 		this.name = string;
 		this.health = health;
 		this.level = level;
 		this.icon = icon;
-		this.panel = panel;
-		this.l = l;
 		this.c = c;
 	}
 	
-	public Camera createCamera() {
-		camera = new Camera(this, this.x, this.y, this.l, this.panel);
-		return camera;
-	}
+//	public Camera createCamera(AsciiPanel p) {
+//		camera = new Camera(this, this.x, this.y, this.l, p);
+//		return camera;
+//	}
 	
-	public void setCamera() {
-		this.camera = createCamera();
+	public void setCamera(Camera c) {
+		this.camera = c;
 	}
 	
 	public void setLevel(Level l) {
@@ -93,6 +91,10 @@ public class Creature extends Entity{
 		if(l.checkWalkable(this.getx(), this.gety()))
 			return false;
 		return true;
+	}
+	
+	public void addAtEmptyLocation() {
+		
 	}
 
 

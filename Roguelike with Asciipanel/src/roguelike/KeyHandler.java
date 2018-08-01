@@ -6,24 +6,26 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener{
 	private Creature p;
 	private ApplicationMain a;
+	public World w;
 	
 	public KeyHandler(Creature p, ApplicationMain a) {
 		this.p = p;
 		this.a = a;
+		this.w = w;
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent k) {
-		if(k.getKeyCode() == KeyEvent.VK_DOWN) {
+		if(k.getKeyCode() == KeyEvent.VK_S) {
 			p.moveCreature(0, 1);
 		}
-		if(k.getKeyCode() == KeyEvent.VK_UP) {
+		if(k.getKeyCode() == KeyEvent.VK_W) {
 			p.moveCreature(0, -1);
 		}
-		if(k.getKeyCode() == KeyEvent.VK_RIGHT) {
+		if(k.getKeyCode() == KeyEvent.VK_D) {
 			p.moveCreature(1, 0);
 		}
-		if(k.getKeyCode() == KeyEvent.VK_LEFT) {
+		if(k.getKeyCode() == KeyEvent.VK_A) {
 			p.moveCreature(-1, 0);
 		}
 		

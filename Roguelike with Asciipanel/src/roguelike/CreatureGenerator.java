@@ -7,23 +7,24 @@ import asciiPanel.AsciiPanel;
 public class CreatureGenerator {
 	
 	public ArrayList<Creature> Creatures;
-	private AsciiPanel panel;
-	private Level level;
+	public Creature[][] creatureMap;
+	public LevelGenerator lg;
 	
-	public CreatureGenerator(AsciiPanel panel, Level l) {
+	public CreatureGenerator(LevelGenerator lg) {
 		this.Creatures = new ArrayList<Creature>();
-		this.panel = panel;
-		this.level = l;
+		this.lg = lg;
 	}
 	
-	public Creature newPlayer() {
-		Creature newPlayerInstance = new Creature("Player", 100, 1, '@', 10, 10, panel, level, Color.WHITE);
-		return newPlayerInstance;
-
-	}
+//	public Creature newPlayer() {
+//		Creature newPlayerInstance = new Creature("Player", 100, 1, '@', 10, 10, panel, level, Color.WHITE);
+//		return newPlayerInstance;
+//
+//	}
+	
+	//consider deleting this
 	
 	public Creature newMonster() {
-		Creature monster = new Creature("Monster", 111, 1, '$', 11, 11, panel, level, Color.RED);
+		Creature monster = new Creature("Monster", 111, 1, '$', 11, 11, Color.RED);
 		return monster;
 	}
 	public void addCreatureToCreatures(Creature creature) {
