@@ -8,7 +8,8 @@ import asciiPanel.AsciiPanel;
 
 public class Level {
 	public ArrayList<Tiles> tileList;
-	public ArrayList<Enemy> enemyList;
+	public ArrayList<Creature> enemyList;
+	public Creature[][] enemyMap;
 	//public ArrayList<Level> levels; add this in another class
 	public Entity[][] Map;
 	public ArrayList<Entity> FreeTileList;
@@ -16,20 +17,25 @@ public class Level {
 	private int difficulty;
 	public int width;
 	public int height;
+	public Player player;
+	
+	public Entity[][] charMap;
 	
 	
-	public Level(String name, Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetileList, int difficulty, int w, int h) {
+	public Level(String name, Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetileList, Entity[][] charmap, int difficulty, int w, int h) {
 		this.name = name;
 		this.Map = map;
 		this.tileList = tilelist;
-		this.enemyList = new ArrayList<Enemy>();
 		this.FreeTileList = freetileList;
+		this.charMap = charmap;
 		this.difficulty = difficulty;
 		this.width = w;
 		this.height = h;
 	}
 	
-	
+	public void setPlayer(Player p) {
+		this.player = p;
+	}
 	
 //	public void drawLevel(AsciiPanel panel) {
 //		for(Tiles tile : this.tileList) {
@@ -55,6 +61,34 @@ public class Level {
 		}
 		return false;
 	}
+	
+	public void updateEnemyMap() {
+		for(Creature c : enemyList) {
+			enemyMap[c.getx()][c.gety()] = c;
+		}
+	}
+	
+	//WARNING!!!! THIS METHOD WILL CLEAR BASED ON COORDINATES IN LIST, NOT ENTIRE MAP
+	public void clearEnemyMap() {
+		for(Creature c : enemyList) {
+			enemyMap[c.getx()][c.gety()] = null;
+		}
+	}
+	
+	public void clearEnemyMapPosition(int x, int y) {
+		enemyMap[x][y] = null;
+	}
+	
+	//this function also updates the enemymap
+	public void moveAllCreatures() {
+		for(Creature c : enemyList) {
+			clearEnemyMapPosition(c.getx(), c.gety());
+			c.moveRandom();
+			updateEnemyMap();
+		}
+	}
+	
+	//dont do this, justs check to draw the creature on the camera iteration
 
 	
 }

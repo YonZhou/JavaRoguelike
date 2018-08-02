@@ -63,10 +63,15 @@ public class Camera{
 				//check for out of bounds on map
 				if(i + startx - topLeftX< 0 || i + startx - topLeftX > l.width - 1|| j + starty - topLeftY < 0 || j + starty - topLeftY> l.height - 1) {
 					p.write(' ', i, j);
-				} else if(l.Map[startx + i - topLeftX][starty + j - topLeftY] == null) {
+				} else if(l.charMap[startx + i - topLeftX][starty + j - topLeftY] == null) {
 					p.write(' ', i, j);
 				} else {
-					p.write(l.Map[startx + i - topLeftX][starty + j - topLeftY].getID(), i, j, l.Map[startx + i - topLeftX][starty + j - topLeftY].getColor());
+					p.write(l.charMap[startx + i - topLeftX][starty + j - topLeftY].getID(), i, j, l.charMap[startx + i - topLeftX][starty + j - topLeftY].getColor());
+					
+					//check for enemies on the map and add them at subsequent locations
+					if(l.enemyMap[startx + i - topLeftX][starty + j - topLeftY] != null) {
+						p.write(l.enemyMap[startx + i - topLeftX][starty + j - topLeftY].getID(),i,j,l.enemyMap[startx + i - topLeftX][starty + j - topLeftY].getColor());
+					}
 				}
 			}
 		}

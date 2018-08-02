@@ -24,17 +24,27 @@ public class LevelGenerator {
 		
 	}
 	
-	public Level generateLevel(int dif, int w, int h) {
-		this.width = w;
-		this.height = h;
-		this.map = new Entity[width][height];
-
+//	public Level generateLevel(int dif, int w, int h) {
+//		this.width = w;
+//		this.height = h;
+//		this.map = new Entity[width][height];
+//
+//		
+//		generateWalls();
+//
+//
+//		
+//		return new Level("test", map, tileslist, freetilelist, dif, width, height);
+//	}
+	public Entity[][] generateCharMap(Entity[][] map) {
+		Entity[][] charmap = new Entity[map.length][map[0].length];
 		
-		generateWalls();
-
-
-		
-		return new Level("test", map, tileslist, freetilelist, dif, width, height);
+		for(int i=0; i<map.length; i++) {
+			for(int j=0; j<map[0].length; j++) {
+				charmap[i][j] = map[i][j];
+			}
+		}
+		return charmap;
 	}
 	
 	
@@ -46,17 +56,38 @@ public class LevelGenerator {
 		
 		
 		Entity[][] map = new Entity[width][height];
+		Creature[][] EnemyMap = new Creature[width][height];
 		
 		generateRWalk(map, w, h);
 		
 		ArrayList<Tiles> tilelist = new ArrayList<Tiles>();
 		ArrayList<Entity> freetilelist = new ArrayList<Entity>();
+		ArrayList<Creature> enemylist = new ArrayList<Creature>();
 		
 		parseTileLists(map, tilelist, freetilelist);
 		
 		generateExitTile(map, tilelist, freetilelist);
 		
-		return new Level("test", map, tilelist, freetilelist, dif, width, height);
+		Entity[][] cMap = generateCharMap(map);
+		
+		Level generatedLevel = new Level("test", map, tilelist, freetilelist, cMap, dif, width, height);
+		generatedLevel.enemyMap = EnemyMap;
+		generatedLevel.enemyList = enemylist;
+		
+		generateCreatures(generatedLevel);
+		
+		return generatedLevel;
+	}
+	
+	public void generateCreatures(Level level) {
+		for(int i=0; i < 10; i++) {
+			Zombie z = new Zombie("Zombie", 100, 1, 1);
+			z.setLevel(level);
+			z.addAtEmptyLocation();
+			level.enemyMap[z.getx()][z.gety()] = z; //when creature moves, need to update map but not update list
+			level.enemyList.add(z);
+		}
+		
 	}
 	
 	//add all entries of map to tilelist and walkabletilelist
@@ -72,7 +103,7 @@ public class LevelGenerator {
 	
 	public void generateRWalk(Entity[][] map, int w, int h) {
 		Random r = new Random();
-		int max = (int) (w*h*0.7);
+		int max = (int) (w*h*0.5); //maximum empty blocks
 		int min = (int) (w*h*0.5);
 		
 		int numCells = r.nextInt(max - min + 1) + min;
@@ -219,4 +250,5 @@ public class LevelGenerator {
 			}
 		}
 	}
+	
 }

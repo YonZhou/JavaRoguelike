@@ -5,7 +5,8 @@ import java.util.Random;
 
 
 public class Player extends Creature{
-	public World w;
+
+	private Creature engagedCreature;
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
@@ -13,7 +14,7 @@ public class Player extends Creature{
 	}
 	
 	public void setWorld(World w) {
-		this.w = w;
+		this.world = w;
 	}
 	
 	@Override
@@ -35,6 +36,11 @@ public class Player extends Creature{
 //		}
 	}
 	
+	public void setLevel(Level l) {
+		this.l = l;
+		this.camera.setLevel(l);
+		addAtEmptyLocation();
+	}
 	@Override
 	public void moveCreature(int dx, int dy) {
 		this.x += dx;
@@ -42,24 +48,34 @@ public class Player extends Creature{
 		
 		
 		if(checkForCollision()) {
+			if(checkForFight()) {
+				System.out.println("contact");
+				
+				l.clearEnemyMap();
+				
+				attack(engagedCreature);
+				
+				l.updateEnemyMap();
+			}
 			this.x -= dx;
 			this.y -= dy;
 		}
 		
 		if(checkForExit()) {
-			setLevel(w.nextLevel());
+			Level nextL = world.nextLevel(); 
+			setLevel(nextL);
+			nextL.setPlayer(this);
 			this.camera.renderCamera();
-			addAtEmptyLocation();
 		}
-		
+		l.moveAllCreatures();
 		
 	}
 	
 	@Override
 	public boolean checkForCollision() {
-		if(l.checkWalkable(this.getx(), this.gety()))
-			return false;
-		return true;
+		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null)
+			return true;
+		return false;
 	}
 	
 	public boolean checkForExit() {
@@ -67,6 +83,18 @@ public class Player extends Creature{
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean checkForFight() {
+		if(l.enemyMap[this.getx()][this.gety()] != null) {
+			this.engagedCreature = l.enemyMap[this.getx()][this.gety()];
+			return true;
+		}
+		return false;
+	}
+	
+	public void attack(Creature other) {
+		other.die();
 	}
 
 }

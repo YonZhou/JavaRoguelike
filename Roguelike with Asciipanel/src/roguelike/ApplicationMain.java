@@ -24,7 +24,7 @@ public class ApplicationMain extends JFrame{
 	    World world = new World();
 	    
 	    // world.setBoundDimensions(1000, 1000, TERMINAL_WIDTH, TERMINAL_HEIGHT);
-	    world.setBoundDimensions(100, 100, 10, 10);
+	    world.setBoundDimensions(10, 10, 10, 10);
 	    world.createRWalkLevel();
 	    world.setCurrentLevel(world.levelList.get(0));
 	    
@@ -35,10 +35,11 @@ public class ApplicationMain extends JFrame{
 	    //only needs to be called once
 	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, terminal);
 	    Player.setCamera(camera);
-	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 0);
+	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT - 10, 0, 10);
 	    
 	    //camera level is set along with camera
 	    Player.setLevel(thirdLevel);
+	    thirdLevel.setPlayer(Player);
 	    Player.addAtEmptyLocation();
 	    
 	    Player.camera.renderCamera();

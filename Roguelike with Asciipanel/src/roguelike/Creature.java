@@ -1,5 +1,6 @@
 package roguelike;
 import java.awt.Color;
+import java.util.Random;
 
 import asciiPanel.AsciiPanel;
 
@@ -8,10 +9,10 @@ public class Creature extends Entity{
 	public int level;
 	private String name;
 	public char icon;
-	private AsciiPanel panel;
 	private Color c;
 	public Level l;
 	public Camera camera;
+	public World world;
 	// add map
 	
 	public Creature(String string, int health, int level, char icon, int x, int y, Color c) {
@@ -22,6 +23,8 @@ public class Creature extends Entity{
 		this.icon = icon;
 		this.c = c;
 	}
+	
+	
 	
 //	public Camera createCamera(AsciiPanel p) {
 //		camera = new Camera(this, this.x, this.y, this.l, p);
@@ -34,7 +37,6 @@ public class Creature extends Entity{
 	
 	public void setLevel(Level l) {
 		this.l = l;
-		this.camera.setLevel(l);
 	}
 
 	
@@ -88,15 +90,44 @@ public class Creature extends Entity{
 	
 
 	public boolean checkForCollision() {
-		if(l.checkWalkable(this.getx(), this.gety()))
-			return false;
-		return true;
+		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null || (this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
+			if(l.enemyMap[this.getx()][this.gety()] != null)
+				System.out.println("collision on another detected");
+			return true;
+		}
+		return false;
 	}
 	
 	public void addAtEmptyLocation() {
+		Random r = new Random();
+		int max = this.l.FreeTileList.size();
 		
+		int randomIndex = r.nextInt(max);
+		this.x = l.FreeTileList.get(randomIndex).getx();
+		this.y = l.FreeTileList.get(randomIndex).gety();
+		
+		l.FreeTileList.remove(randomIndex);
 	}
-
+	
+	//add death function, where remove from enemy list, and then have the update creaturemap function first clear map based on list, then rewrite
+	public void die() {
+		this.l.enemyList.remove(this);
+	}
+	
+	public void moveRandom() {
+		Random r = new Random();
+		int randomDir = r.nextInt(4) + 1;
+		
+		if(randomDir == 1) {
+			moveCreature(0,-1);
+		} else if(randomDir == 2) {
+			moveCreature(1,0);
+		} else if(randomDir == 3) {
+			moveCreature(0,1);
+		} else {
+			moveCreature(-1, 0);
+		}
+	}
 
 	
 

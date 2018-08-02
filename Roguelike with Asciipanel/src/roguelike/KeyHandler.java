@@ -6,12 +6,10 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener{
 	private Creature p;
 	private ApplicationMain a;
-	public World w;
 	
 	public KeyHandler(Creature p, ApplicationMain a) {
 		this.p = p;
 		this.a = a;
-		this.w = w;
 	}
 	
 	@Override
@@ -28,11 +26,20 @@ public class KeyHandler implements KeyListener{
 		if(k.getKeyCode() == KeyEvent.VK_A) {
 			p.moveCreature(-1, 0);
 		}
+		if(k.getKeyCode() == KeyEvent.VK_SPACE) {
+			Level nextL = p.world.nextLevel(); 
+			p.setLevel(nextL);
+			nextL.setPlayer((Player) p);
+			p.camera.renderCamera();
+		}
 		
+		//p.l.update();
+		
+		//function is called whenever key is detected(render camera sets coords and rewrites screen)
 		p.camera.renderCamera();
 		a.repaint();
-        System.out.println(p.x);
-        System.out.println(p.y);
+        System.out.println("Player x " + p.x);
+        System.out.println("Player y " + p.y);
 		
 	}
 
