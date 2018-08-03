@@ -91,13 +91,16 @@ public class Creature extends Entity{
 
 	public boolean checkForCollision() {
 		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null || (this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
-			if(l.enemyMap[this.getx()][this.gety()] != null)
-				System.out.println("collision on another detected");
+			if(l.enemyMap[this.getx()][this.gety()] != null) {
+				
+			}
+				
 			return true;
 		}
 		return false;
 	}
 	
+	//function already removes the free tile from the list after added
 	public void addAtEmptyLocation() {
 		Random r = new Random();
 		int max = this.l.FreeTileList.size();
@@ -124,6 +127,34 @@ public class Creature extends Entity{
 			moveCreature(1,0);
 		} else if(randomDir == 3) {
 			moveCreature(0,1);
+		} else {
+			moveCreature(-1, 0);
+		}
+	}
+	
+	public void updateMove() {
+		if(inRange()) {
+			System.out.println("f");
+			moveOnMap();
+		} else {
+			moveRandom();
+		}
+	}
+	
+	public boolean inRange() {
+		if(this.getx() > l.player.ai.topLeftX && this.getx() < l.player.ai.topLeftX + l.player.aggroWidth && this.gety() > l.player.ai.topLeftY && this.gety() < l.player.ai.topLeftY + l.player.aggroHeight) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void moveOnMap() {
+		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 1) {
+			moveCreature(0, -1);
+		} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 2) {
+			moveCreature(1, 0);
+		} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 3) {
+			moveCreature(0, 1);
 		} else {
 			moveCreature(-1, 0);
 		}

@@ -76,14 +76,22 @@ public class LevelGenerator {
 		
 		generateCreatures(generatedLevel);
 		
+		
 		return generatedLevel;
 	}
 	
+	
 	public void generateCreatures(Level level) {
-		for(int i=0; i < 10; i++) {
+		int free = level.FreeTileList.size();
+		
+		Random r = new Random();
+		int numToGenerate = r.nextInt((int) (Math.sqrt(free)) - (int) (Math.sqrt(free)*0.5) + 1) + (int) (Math.sqrt(free)*0.5);
+	
+		
+		for(int i=0; i < numToGenerate; i++) {
 			Zombie z = new Zombie("Zombie", 100, 1, 1);
 			z.setLevel(level);
-			z.addAtEmptyLocation();
+			z.addAtEmptyLocation(); //already deletes overwritten tile from list
 			level.enemyMap[z.getx()][z.gety()] = z; //when creature moves, need to update map but not update list
 			level.enemyList.add(z);
 		}

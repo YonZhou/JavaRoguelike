@@ -13,8 +13,9 @@ public class World {
 	public int minHeight;
 	public Level currentlevel;
 	public int currentLevelCount;
+	public Player p;
 	
-	public World() {
+	public World(Player p) {
 		this.levelList = new ArrayList<Level>();
 		this.levelGen = new LevelGenerator();
 		this.currentLevelCount = 0;

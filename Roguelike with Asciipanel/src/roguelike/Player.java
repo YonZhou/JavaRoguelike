@@ -7,10 +7,15 @@ import java.util.Random;
 public class Player extends Creature{
 
 	private Creature engagedCreature;
+	public int aggroWidth;
+	public int aggroHeight;
+	public PathFindingAI ai;
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
-
+		this.aggroWidth = 35;
+		this.aggroHeight = 35;
+		this.ai = new PathFindingAI(this);
 	}
 	
 	public void setWorld(World w) {
@@ -67,6 +72,8 @@ public class Player extends Creature{
 			nextL.setPlayer(this);
 			this.camera.renderCamera();
 		}
+		ai.updateMap();
+		
 		l.moveAllCreatures();
 		
 	}
@@ -96,5 +103,6 @@ public class Player extends Creature{
 	public void attack(Creature other) {
 		other.die();
 	}
+	
 
 }

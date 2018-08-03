@@ -18,8 +18,11 @@ public class Level {
 	public int width;
 	public int height;
 	public Player player;
+	public PathFindingAI ai;
 	
 	public Entity[][] charMap;
+	
+	public Integer[][] aiMap;
 	
 	
 	public Level(String name, Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetileList, Entity[][] charmap, int difficulty, int w, int h) {
@@ -83,11 +86,15 @@ public class Level {
 	public void moveAllCreatures() {
 		for(Creature c : enemyList) {
 			clearEnemyMapPosition(c.getx(), c.gety());
-			c.moveRandom();
+			c.updateMove();
 			updateEnemyMap();
 		}
 	}
 	
+	
+	public void addAiMap(Integer[][] aimap) {
+		this.aiMap = aimap;
+	}
 	//dont do this, justs check to draw the creature on the camera iteration
 
 	

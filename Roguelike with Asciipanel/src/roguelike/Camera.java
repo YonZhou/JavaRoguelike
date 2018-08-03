@@ -8,7 +8,7 @@ public class Camera{
 	private int x;
 	private int y;
 	private Level l;
-	private AsciiPanel p;
+	public AsciiPanel p;
 	public int width;
 	public int height;
 	public int topLeftX;
@@ -91,5 +91,6 @@ public class Camera{
 	public void setLevel(Level l) {
 		this.l = l;
 	}
+	
 
 }
