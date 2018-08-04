@@ -122,13 +122,14 @@ public class Player extends Creature{
 	
 	@Override
 	public void die() {
-		
+		resetStats();
+		this.world.p = this; //TODO : WHY NEED TO REDEFINE THIS???
+		this.world.reset();
 	}
 	
 	public void resetStats() {
 		this.health = 100;
 		this.isAlive = true;
-		
 	}
 	
 

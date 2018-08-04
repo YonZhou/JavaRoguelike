@@ -28,9 +28,14 @@ public class MainGUI extends AsciiPanel{
 		panel.write("Player Health: " + Integer.toString(player.health), topLeftX, topLeftY);
 	}
 	
+	public void displayLevelCount() {
+		panel.write("Current depth: " + player.world.levelList.size(), topLeftX, topLeftY + 1);
+	}
+	
 	public void refresh() {
 		drawLine();
 		displayPlayerHealth();
+		displayLevelCount();
 	}
 
 }
