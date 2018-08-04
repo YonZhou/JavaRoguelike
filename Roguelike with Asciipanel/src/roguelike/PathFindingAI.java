@@ -7,7 +7,8 @@ import java.util.LinkedList;
 public class PathFindingAI {
 	
 	public Integer[][] map;
-	private Player p;
+	public boolean[][] toAvoid;
+ 	private Player p;
 	public int startX;
 	public int startY;
 	public int topLeftX;
@@ -25,6 +26,7 @@ public class PathFindingAI {
 		directions.add(new Point(1,0));
 		directions.add(new Point(0,1));
 		directions.add(new Point(-1,0));
+		this.toAvoid = new boolean[p.aggroWidth][p.aggroHeight];
 		this.map = new Integer[p.aggroWidth][p.aggroHeight]; //pathfinding  map is size of entire map 
 	}
 	
@@ -54,15 +56,16 @@ public class PathFindingAI {
 				//
 				if(checkInMapBounds(topLeftX + directionCheckX, topLeftY + directionCheckY) && p.l.Map[topLeftX + directionCheckX][topLeftY + directionCheckY].isWalkable() && checkInBounds(directionCheckX, directionCheckY)) {
 					//System.out.println(map[directionCheckX][directionCheckY]);
-					if(map[directionCheckX][directionCheckY] == null) {
+					if(map[directionCheckX][directionCheckY] == null && toAvoid[directionCheckX][directionCheckY] == false) {
 						Point point = new Point(directionCheckX, directionCheckY);
-						edgeList.add(point);
+						edgeList.addLast(point);
 						Integer newDir = convertDir(dir);
 						map[directionCheckX][directionCheckY] = newDir;
 						
 					}
 				}
 			}
+			
 			edgeList.removeFirst();
 		}	
 	}
@@ -112,6 +115,14 @@ public class PathFindingAI {
 		for(int i=0; i< p.aggroWidth; i++) {
 			for(int j=0; j<p.aggroHeight; j++) {
 				map[i][j] = null;
+			}
+		}
+	}
+	
+	public void clearToAvoid() {
+		for(int i=0; i< p.aggroWidth; i++) {
+			for(int j=0; j<p.aggroHeight; j++) {
+				toAvoid[i][j] = false;
 			}
 		}
 	}

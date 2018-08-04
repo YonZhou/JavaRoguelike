@@ -84,9 +84,15 @@ public class Level {
 	
 	//this function also updates the enemymap
 	public void moveAllCreatures() {
+		player.ai.clearToAvoid();
+		
 		for(Creature c : enemyList) {
 			clearEnemyMapPosition(c.getx(), c.gety());
 			c.updateMove();
+			if(c.inRange()) {
+				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+				player.ai.updateMap();
+			}
 			updateEnemyMap();
 		}
 	}

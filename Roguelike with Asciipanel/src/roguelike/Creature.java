@@ -139,20 +139,18 @@ public class Creature extends Entity{
 		}
 	}
 	
-	public void moveCreature2(int x, int y) {
-		
-	}
 	
+	//after moving, and if in range then update the pathfinding ai to ignore that block and generate a new one
 	public void updateMove() {
 		
 		if(inRange()) {
 			Random r = new Random();
-			int i = r.nextInt(6);
-			if(i > 0)
+			int ifMap = r.nextInt(6);
+			if(ifMap > 0) {
 				moveOnMap();
-			else
+			} else {
 				moveRandom();
-			
+			}
 		} else {
 			moveRandom();
 		}
@@ -165,8 +163,14 @@ public class Creature extends Entity{
 		return false;
 	}
 	
+	//potential major problem of some enemies returning null? to check, erase the check on toavoid and remove the if == null because shouldnt be any null
 	public void moveOnMap() {
-		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 1) {
+		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == null) {
+			moveRandom();
+			System.out.println(this.getx() + " + " + this.gety());
+			this.c = Color.BLUE;
+		}
+		  else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 1) {
 			moveCreature(0, -1);
 		} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 2) {
 			moveCreature(1, 0);

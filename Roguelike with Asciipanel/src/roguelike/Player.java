@@ -14,8 +14,8 @@ public class Player extends Creature{
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
-		this.aggroWidth = 999;
-		this.aggroHeight = 999;
+		this.aggroWidth = 99;
+		this.aggroHeight = 99;
 		this.ai = new PathFindingAI(this);
 	}
 	
@@ -73,6 +73,7 @@ public class Player extends Creature{
 			nextL.setPlayer(this);
 			this.camera.renderCamera();
 		}
+		
 		
 		ai.updateMap();
 		
