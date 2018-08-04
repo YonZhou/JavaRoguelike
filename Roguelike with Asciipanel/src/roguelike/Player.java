@@ -10,11 +10,12 @@ public class Player extends Creature{
 	public int aggroWidth;
 	public int aggroHeight;
 	public PathFindingAI ai;
+	public boolean isAlive = true;
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
-		this.aggroWidth = 35;
-		this.aggroHeight = 35;
+		this.aggroWidth = 999;
+		this.aggroHeight = 999;
 		this.ai = new PathFindingAI(this);
 	}
 	
@@ -72,10 +73,21 @@ public class Player extends Creature{
 			nextL.setPlayer(this);
 			this.camera.renderCamera();
 		}
+		
 		ai.updateMap();
 		
 		l.moveAllCreatures();
 		
+		checkDeath();
+		
+	}
+	
+	public void checkDeath() {
+		if(this.health <= 0) {
+			this.isAlive = false;
+			System.out.println(this.isAlive);
+			die();
+		}
 	}
 	
 	@Override
@@ -101,7 +113,21 @@ public class Player extends Creature{
 	}
 	
 	public void attack(Creature other) {
-		other.die();
+		other.health -= 50;
+		if(other.health <= 0) {
+			other.die();
+		}
+	}
+	
+	@Override
+	public void die() {
+		
+	}
+	
+	public void resetStats() {
+		this.health = 100;
+		this.isAlive = true;
+		
 	}
 	
 
