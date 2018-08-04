@@ -50,9 +50,6 @@ public class Creature extends Entity{
 		
 		
 		if(checkForCollision()) {
-			if((this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
-				attackPlayer();
-			}
 			this.x -= dx;
 			this.y -= dy;
 		}
@@ -91,16 +88,12 @@ public class Creature extends Entity{
 //		}
 //	}
 	
-	public void attackPlayer() {
-		this.l.player.health -= 10;
-	}
-	
 
 	public boolean checkForCollision() {
 		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null || (this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
-//			if(l.enemyMap[this.getx()][this.gety()] != null) {
-//				
-//			}
+			if(l.enemyMap[this.getx()][this.gety()] != null) {
+				
+			}
 				
 			return true;
 		}
@@ -139,27 +132,17 @@ public class Creature extends Entity{
 		}
 	}
 	
-	public void moveCreature2(int x, int y) {
-		
-	}
-	
 	public void updateMove() {
-		
 		if(inRange()) {
-			Random r = new Random();
-			int i = r.nextInt(6);
-			if(i > 0)
-				moveOnMap();
-			else
-				moveRandom();
-			
+			System.out.println("f");
+			moveOnMap();
 		} else {
 			moveRandom();
 		}
 	}
 	
 	public boolean inRange() {
-		if(this.getx() > l.player.ai.topLeftX && this.getx() < l.player.ai.topLeftX + l.player.aggroWidth - 1 && this.gety() > l.player.ai.topLeftY && this.gety() < l.player.ai.topLeftY + l.player.aggroHeight - 1) {
+		if(this.getx() > l.player.ai.topLeftX && this.getx() < l.player.ai.topLeftX + l.player.aggroWidth && this.gety() > l.player.ai.topLeftY && this.gety() < l.player.ai.topLeftY + l.player.aggroHeight) {
 			return true;
 		}
 		return false;

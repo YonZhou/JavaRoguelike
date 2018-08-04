@@ -24,7 +24,6 @@ public class MainGUI extends AsciiPanel{
 	}
 	
 	public void displayPlayerHealth() {
-		panel.clear(' ', 0, 0, width, 1);
 		panel.write("Player Health: " + Integer.toString(player.health), topLeftX, topLeftY);
 	}
 	

@@ -27,18 +27,18 @@ public class ApplicationMain extends JFrame{
 	    
 	    
 	    Player = new Player(100, 1, 1, 1);
-	    //only needs to be called once
-	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, terminal);
-	    Player.setCamera(camera);
 	    World world = new World(Player);
 	    Player.setWorld(world);
 	    
 	    
-	    world.setBoundDimensions(1000, 1000, 100, 100);
+	    world.setBoundDimensions(100, 100, 100, 100);
 	    world.createRWalkLevel();
 	    world.setCurrentLevel(world.levelList.get(0));
-	    
 	    Level thirdLevel = world.currentlevel;
+	    
+	    //only needs to be called once
+	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, terminal);
+	    Player.setCamera(camera);
 	    //Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT - 10, 0, 10);
 	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
 	    
@@ -68,7 +68,7 @@ public class ApplicationMain extends JFrame{
     	//re-draw everything that will stay on screen(not needed anymore?)
 //	    currentLevel.drawLevel(terminal);
 	    //Player.drawCreature();
-    	g.refresh();
+    	//g.refresh();
     	super.repaint();
     }
     
