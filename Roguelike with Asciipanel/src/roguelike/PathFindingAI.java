@@ -12,14 +12,14 @@ public class PathFindingAI {
 	public int startY;
 	public int topLeftX;
 	public int topLeftY;
-	public ArrayList<Point> edgeList;
+	public LinkedList<Point> edgeList;
 	public final ArrayList<Point> directions;
 	
 	//convert creature x y to map x y: subtract topleft coordinates
 	
 	public PathFindingAI(Player p) {
 		this.p = p;
-		this.edgeList = new ArrayList<Point>();
+		this.edgeList = new LinkedList<Point>();
 		directions = new ArrayList<Point>();
 		directions.add(new Point(0,-1));
 		directions.add(new Point(1,0));
@@ -31,10 +31,10 @@ public class PathFindingAI {
 	
 	//note that terminal will display old directions when checking because u didnt clear
 	public void updateMap() {
-		clearMap();
 		
 		this.topLeftX = p.getx() - p.aggroWidth / 2;
 		this.topLeftY = p.gety() - p.aggroHeight / 2;
+		clearMap();
 		
 		Point playerStart = new Point(p.getx() - topLeftX, p.gety() - topLeftY);
 		
@@ -44,7 +44,7 @@ public class PathFindingAI {
 //			for(int j=0; j<p.aggroHeight; j++) {
 				
 		while(!(edgeList.isEmpty())) {
-			Point Current = edgeList.get(0);
+			Point Current = edgeList.getFirst();
 			
 			//loop through all directions
 			for(Point dir : directions) {
@@ -53,19 +53,17 @@ public class PathFindingAI {
 				//add check for out of bounds in the current aggro range
 				//
 				if(checkInMapBounds(topLeftX + directionCheckX, topLeftY + directionCheckY) && p.l.Map[topLeftX + directionCheckX][topLeftY + directionCheckY].isWalkable() && checkInBounds(directionCheckX, directionCheckY)) {
-					System.out.println(map[directionCheckX][directionCheckY]);
+					//System.out.println(map[directionCheckX][directionCheckY]);
 					if(map[directionCheckX][directionCheckY] == null) {
 						Point point = new Point(directionCheckX, directionCheckY);
 						edgeList.add(point);
 						Integer newDir = convertDir(dir);
 						map[directionCheckX][directionCheckY] = newDir;
 						
-						p.camera.p.write(Integer.toString(newDir), directionCheckX, directionCheckY);
 					}
 				}
 			}
-			edgeList.remove(Current);
-			System.out.println(edgeList.size());
+			edgeList.removeFirst();
 		}	
 	}
 	

@@ -14,11 +14,13 @@ public class World {
 	public Level currentlevel;
 	public int currentLevelCount;
 	public Player p;
+	public GameOverScreen ggScreen;
 	
 	public World(Player p) {
 		this.levelList = new ArrayList<Level>();
 		this.levelGen = new LevelGenerator();
 		this.currentLevelCount = 0;
+		this.ggScreen = new GameOverScreen(p.camera.p);
 	}
 	
 	public void setBoundDimensions(int wM, int hM, int wm, int hm) {
@@ -44,6 +46,10 @@ public class World {
 		createRWalkLevel();
 		currentLevelCount++;
 		return levelList.get(currentLevelCount);
+	}
+	
+	public void reset() {
+		
 	}
 	
 
