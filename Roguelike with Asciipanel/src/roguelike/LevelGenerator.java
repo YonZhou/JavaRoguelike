@@ -87,6 +87,8 @@ public class LevelGenerator {
 		Random r = new Random();
 		int numToGenerate = r.nextInt((int) (Math.sqrt(free)) - (int) (Math.sqrt(free)*0.5) + 1) + (int) (Math.sqrt(free)*0.5);
 	
+		//use for testing 
+//		int numToGenerate = 5; 
 		
 		for(int i=0; i < numToGenerate; i++) {
 			Zombie z = new Zombie("Zombie", 100, 1, 1);

@@ -20,6 +20,7 @@ public class World {
 		this.levelList = new ArrayList<Level>();
 		this.levelGen = new LevelGenerator();
 		this.currentLevelCount = 0;
+		this.p = p;
 		this.ggScreen = new GameOverScreen(p.camera.p);
 	}
 	

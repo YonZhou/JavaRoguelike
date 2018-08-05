@@ -26,7 +26,8 @@ public class ApplicationMain extends JFrame{
 	    // world.setBoundDimensions(1000, 1000, TERMINAL_WIDTH, TERMINAL_HEIGHT);
 	    
 	    
-	    Player = new Player(100, 1, 1, 1);
+	    Player = new Player(100000, 1, 1, 1);
+	    
 	    //only needs to be called once
 	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, terminal);
 	    Player.setCamera(camera);

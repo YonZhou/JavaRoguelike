@@ -49,5 +49,9 @@ public class Entity {
 	public Color getColor() {
 		return this.c;
 	}
+	
+	public void setColor(Color c) {
+		this.c = c;
+	}
 
 }

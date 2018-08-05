@@ -49,11 +49,15 @@ public class Player extends Creature{
 	}
 	@Override
 	public void moveCreature(int dx, int dy) {
-		this.x += dx;
-		this.y += dy;
 		
+		if(checkForExit(x + dx, y + dy)) {
+			Level nextL = world.nextLevel(); 
+			setLevel(nextL);
+			nextL.setPlayer(this);
+			this.camera.renderCamera();
+		}
 		
-		if(checkForCollision()) {
+		if(checkForCollision(x+dx, y+dy)) {
 			if(checkForFight()) {
 				System.out.println("contact");
 				
@@ -63,16 +67,11 @@ public class Player extends Creature{
 				
 				l.updateEnemyMap();
 			}
-			this.x -= dx;
-			this.y -= dy;
+		} else {
+			this.x += dx;
+			this.y += dy;
 		}
 		
-		if(checkForExit()) {
-			Level nextL = world.nextLevel(); 
-			setLevel(nextL);
-			nextL.setPlayer(this);
-			this.camera.renderCamera();
-		}
 		
 		
 		ai.updateMap();
@@ -92,14 +91,14 @@ public class Player extends Creature{
 	}
 	
 	@Override
-	public boolean checkForCollision() {
-		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null)
+	public boolean checkForCollision(int xC, int yC) {
+		if(!(l.checkWalkable(xC, yC)) || l.enemyMap[xC][yC] != null)
 			return true;
 		return false;
 	}
 	
-	public boolean checkForExit() {
-		if(l.checkExit(this.getx(), this.gety())) {
+	public boolean checkForExit(int xC, int yC) {
+		if(l.checkExit(xC, yC)) {
 			return true;
 		}
 		return false;
@@ -123,7 +122,6 @@ public class Player extends Creature{
 	@Override
 	public void die() {
 		resetStats();
-		this.world.p = this; //TODO : WHY NEED TO REDEFINE THIS???
 		this.world.reset();
 	}
 	

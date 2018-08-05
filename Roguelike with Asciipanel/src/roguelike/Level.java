@@ -84,16 +84,42 @@ public class Level {
 	
 	//this function also updates the enemymap
 	public void moveAllCreatures() {
+		
 		player.ai.clearToAvoid();
+		
+		//first set the entire ai to 
+//		for(int i=0; i<player.aggroWidth; i++) {
+//			for(int j=0; j<player.aggroWidth; i++) {
+//				if(enemyMap[i + player.ai.topLeftX][j + player.ai.topLeftY] != null) {
+//					player.ai.toAvoid[i][j] = true;
+//				}
+//			}
+//		}
+		
+		for(Creature c : enemyList) {
+			if(c.inRange()) {
+				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+			}
+		}
 		
 		for(Creature c : enemyList) {
 			clearEnemyMapPosition(c.getx(), c.gety());
-			c.updateMove();
+			
+			
 			if(c.inRange()) {
-				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = false;
 				player.ai.updateMap();
+				
+				//move the creature after generating new map with ONLY it being "empty"
+				c.moveOnMap(); //coordinates are updated
+				
+				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+				//player.ai.updateMap();
+			} else {
+				c.moveRandom();
 			}
-			updateEnemyMap();
+
+			enemyMap[c.getx()][c.gety()] = c;
 		}
 	}
 	

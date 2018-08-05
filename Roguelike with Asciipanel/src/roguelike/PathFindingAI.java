@@ -56,6 +56,7 @@ public class PathFindingAI {
 				//
 				if(checkInMapBounds(topLeftX + directionCheckX, topLeftY + directionCheckY) && p.l.Map[topLeftX + directionCheckX][topLeftY + directionCheckY].isWalkable() && checkInBounds(directionCheckX, directionCheckY)) {
 					//System.out.println(map[directionCheckX][directionCheckY]);
+					//if(map[directionCheckX][directionCheckY] == null && p.l.enemyMap[directionCheckX + topLeftX][directionCheckY + topLeftY] == null) {
 					if(map[directionCheckX][directionCheckY] == null && toAvoid[directionCheckX][directionCheckY] == false) {
 						Point point = new Point(directionCheckX, directionCheckY);
 						edgeList.addLast(point);
@@ -68,6 +69,26 @@ public class PathFindingAI {
 			
 			edgeList.removeFirst();
 		}	
+		
+		//use below for debugging
+		
+//		for (int i=0;i<map.length;i++) {
+//			String line = "";
+//			for(int j=0; j<map.length; j++) {
+//				if(i == p.getx() - topLeftX && j == p.gety() - topLeftY)
+//					line += "@";
+//				else {
+//					if(map[j][i] == null)
+//						line += "#";
+//					else
+//						line += "^";
+//				}
+//				
+//				
+//			}
+//			System.out.println(line);
+//		}
+//		System.out.println("-----------------------------------");
 	}
 	
 	public boolean checkInMapBounds(Integer x, Integer y) {

@@ -9,7 +9,7 @@ public class Creature extends Entity{
 	public int level;
 	private String name;
 	public char icon;
-	private Color c;
+	public Color c;
 	public Level l;
 	public Camera camera;
 	public World world;
@@ -45,16 +45,15 @@ public class Creature extends Entity{
 	}
 	
 	public void moveCreature(int dx, int dy) {
-		this.x += dx;
-		this.y += dy;
 		
 		
-		if(checkForCollision()) {
+		if(checkForCollision(x+dx, y+dy)) {
 			if((this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
 				attackPlayer();
 			}
-			this.x -= dx;
-			this.y -= dy;
+		} else {
+			this.x += dx;
+			this.y += dy;
 		}
 	}
 
@@ -96,8 +95,8 @@ public class Creature extends Entity{
 	}
 	
 
-	public boolean checkForCollision() {
-		if(!(l.checkWalkable(this.getx(), this.gety())) || l.enemyMap[this.getx()][this.gety()] != null || (this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
+	public boolean checkForCollision(int xC, int yC) {
+		if(!(l.checkWalkable(xC, yC)) || l.enemyMap[xC][yC] != null || (xC == l.player.getx() && yC == l.player.gety())) {
 //			if(l.enemyMap[this.getx()][this.gety()] != null) {
 //				
 //			}
@@ -146,7 +145,7 @@ public class Creature extends Entity{
 		if(inRange()) {
 			Random r = new Random();
 			int ifMap = r.nextInt(6);
-			if(ifMap > 0) {
+			if(ifMap >= 0) {
 				moveOnMap();
 			} else {
 				moveRandom();
@@ -168,17 +167,20 @@ public class Creature extends Entity{
 		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == null) {
 			moveRandom();
 			System.out.println(this.getx() + " + " + this.gety());
-			this.c = Color.BLUE;
+			this.setColor(Color.BLUE);
 		}
-		  else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 1) {
-			moveCreature(0, -1);
-		} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 2) {
-			moveCreature(1, 0);
-		} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 3) {
-			moveCreature(0, 1);
-		} else {
-			moveCreature(-1, 0);
-		}
+		  else {
+			  System.out.println(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY]);
+			  if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 1) {
+				moveCreature(0, -1);
+			} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 2) {
+				moveCreature(1, 0);
+			} else if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == 3) {
+				moveCreature(0, 1);
+			} else {
+				moveCreature(-1, 0);
+			}
+		  }
 	}
 
 	
