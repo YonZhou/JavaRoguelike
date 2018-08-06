@@ -51,10 +51,11 @@ public class Player extends Creature{
 	@Override
 	public void moveCreature(int dx, int dy) {
 		
+		//TODO change it so if enemy is in the way need to get through it first?
 		if(checkForExit(x + dx, y + dy)) {
 			Level nextL = world.nextLevel(); 
 			setLevel(nextL);
-			nextL.setPlayer(this);
+//			nextL.setPlayer(this);
 			this.camera.renderCamera();
 		}
 		
@@ -80,6 +81,8 @@ public class Player extends Creature{
 		l.moveAllCreatures();
 		
 		checkDeath();
+		
+		world.gui.refresh();
 		
 	}
 	

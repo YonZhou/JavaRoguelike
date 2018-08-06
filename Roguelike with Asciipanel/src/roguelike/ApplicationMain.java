@@ -14,7 +14,8 @@ public class ApplicationMain extends JFrame{
     private AsciiPanel terminal;
     public KeyHandler2 mainKeyListener;
     private Player Player;
-    private MainGUI g;
+    public MainGUI g;
+    public World world;
     
     public static final int TERMINAL_WIDTH = 100;
     public static final int TERMINAL_HEIGHT = 50;
@@ -28,38 +29,42 @@ public class ApplicationMain extends JFrame{
 	    
 	    
 	    this.Player = new Player(100, 1, 1, 1);
+	    Player.isAlive = false; //to erase the GUI, but maybe need better method since gameover pops up whoops
 	    
 	    //only needs to be called once
 	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, getTerminal());
 	    Player.setCamera(camera);
-	    World world = new World(Player);
+	    this.world = new World(Player);
 	    Player.setWorld(world);
 	    
 	    world.setApp(this);
-	    world.setBoundDimensions(1000, 1000, 100, 100);
-	    world.createRWalkLevel();
-	    world.setCurrentLevel(world.levelList.get(0));
+	    world.setBoundDimensions(100, 100, 100, 100);
 	    
-	    Level thirdLevel = world.currentlevel;
+//	    world.createRWalkLevel(); //after menu screen
+//	    world.setCurrentLevel(world.levelList.get(0)); //after menu screen
+//	    
+//	    Level firstLevel = world.currentlevel; //after menu screen
 	    //Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT - 10, 0, 10);
 	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
 	    
 	    //camera level is set along with camera
-	    Player.setLevel(thirdLevel);
-	    thirdLevel.setPlayer(Player);
-	    Player.addAtEmptyLocation(); //coordinates are initiated
 	    
-	    g = new MainGUI(getTerminal(), Player, TERMINAL_WIDTH, Player.camera.topLeftY);
+//	    Player.setLevel(firstLevel); //After menu screen
+//	    firstLevel.setPlayer(Player); //after menu screen
+//	    Player.addAtEmptyLocation(); //after menu screen
 	    
-	    Player.camera.renderCamera();
+	    newGame(); //TODO
+	    
+	    
+//	    Player.camera.renderCamera();//after menu screen
 	    
 	    //mainKeyListener = new KeyHandler(Player, this);
 	    //addKeyListener(mainKeyListener);
-	    mainKeyListener = new KeyHandler2(Player, this);
+	    mainKeyListener = new KeyHandler2(world.p, this);
 	    
 	    
 	    System.out.println("Completed task 1");
-    	add(getTerminal());
+    	add(terminal);
     	pack();
     	repaint();
     }
@@ -70,9 +75,9 @@ public class ApplicationMain extends JFrame{
     	//re-draw everything that will stay on screen(not needed anymore?)
 //	    currentLevel.drawLevel(terminal);
 	    //Player.drawCreature();
-    	if(Player.isAlive)
-    		g.refresh();
-    	else {
+    	
+    	//player.isalive draw function should be somewhere else
+    	if(!Player.isAlive) {
     		Player.world.ggScreen.displayScreen();
     	}
     	super.repaint();
@@ -97,5 +102,18 @@ public class ApplicationMain extends JFrame{
 		this.terminal = terminal;
 	}
 	
+	public void newGame() {
+		//fix bug of initially the main gui writing 2 as depth??? TODO
+		Player.isAlive = true;
+		System.out.println(world.levelList.size());
+		world.reset(); //ALREADY MADE THE LEVEL
+		//world.createRWalkLevel();
+	    world.setCurrentLevel(world.levelList.get(0));
+		Player.setLevel(world.levelList.get(0));
+		world.levelList.get(0).setPlayer(Player);
+		Player.addAtEmptyLocation();
+		Player.camera.renderCamera();
+		world.gui.refresh();
+	}
 
 }

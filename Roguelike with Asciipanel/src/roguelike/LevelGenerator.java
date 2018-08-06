@@ -21,7 +21,7 @@ public class LevelGenerator {
 
 	
 	public LevelGenerator() {
-		
+		//nothing here ???
 	}
 	
 //	public Level generateLevel(int dif, int w, int h) {

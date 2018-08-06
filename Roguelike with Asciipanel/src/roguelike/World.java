@@ -16,14 +16,16 @@ public class World {
 	public Player p;
 	public GameOverScreen ggScreen;
 	public ApplicationMain app;
+	public MainGUI gui;
 
 	
 	public World(Player p) {
 		this.levelList = new ArrayList<Level>();
 		this.levelGen = new LevelGenerator();
-		this.currentLevelCount = 0;
+		this.currentLevelCount = -1;
 		this.p = p;
 		this.ggScreen = new GameOverScreen(this);
+		this.gui = new MainGUI(p.camera.p, p, app.TERMINAL_WIDTH, p.camera.topLeftY);
 	}
 	
 	public void setApp(ApplicationMain app) {
@@ -43,6 +45,7 @@ public class World {
 		int height = r.nextInt(maxHeight - minHeight + 1) + minHeight;
 		Level newWalkLevel = this.levelGen.generateRWalkLevel(1, width, height);
 		this.levelList.add(newWalkLevel);
+		newWalkLevel.setPlayer(p); //player will set the level in itself in function exit tile
 		return newWalkLevel;
 	}
 	
@@ -57,14 +60,12 @@ public class World {
 	}
 	
 	public void reset() {
-		this.ggScreen = new GameOverScreen(this);
 		this.levelList.clear();
 		
 		currentLevelCount = -1;
 		
 		Level nextL = nextLevel(); 
 		p.setLevel(nextL);
-		nextL.setPlayer((Player) p);
 		p.camera.renderCamera();
 
 	}

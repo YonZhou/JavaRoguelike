@@ -19,7 +19,7 @@ public class GameOverScreen{
 	public GameOverScreen(World worl) {
 		this.world = worl;
 		this.a = world.p.camera.p;
-		this.NewGame = new PanelText("New Game", Color.GRAY);
+		this.NewGame = new PanelText("New Game", Color.WHITE);
 		this.Quit = new PanelText("Exit", Color.GRAY);
 		this.textList = new ArrayList<PanelText>();
 		textList.add(NewGame);
@@ -30,8 +30,11 @@ public class GameOverScreen{
 	public void gameOverNewGame() {
 		world.p.resetStats();
 		world.reset();
+		//world.app.g.refresh(); //WHY DO INEED TO ADD THIS LINE? fixed, watch out a=panel, app=appmain
 		world.p.camera.renderCamera();
-		a.repaint();
+		world.gui.refresh();
+		world.app.repaint();
+
 	}
 
 	public void moveUp() {

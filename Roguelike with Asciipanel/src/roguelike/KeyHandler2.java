@@ -31,8 +31,9 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("rightKey", new PlayerMovementAction(1, 0));
 		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
 		
-		p.camera.renderCamera();
-		a.repaint();
+		//2 calls below dont do anything???
+		//p.camera.renderCamera();
+		//a.repaint();
         System.out.println("Player x " + p.x);
         System.out.println("Player y " + p.y);
 	}
