@@ -2,6 +2,7 @@ package roguelike;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import asciiPanel.AsciiPanel;
 
@@ -105,15 +106,25 @@ public class Level {
 		for(Creature c : enemyList) {
 			clearEnemyMapPosition(c.getx(), c.gety());
 			
+
 			
 			if(c.inRange()) {
-				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = false;
-				player.ai.updateMap();
-				
-				//move the creature after generating new map with ONLY it being "empty"
-				c.moveOnMap(); //coordinates are updated
-				
-				player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+				Random r = new Random();
+				int moveif = r.nextInt(c.aggroFactor);
+				if(moveif > 0) {
+					player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = false;
+					player.ai.updateMap();
+					
+					//move the creature after generating new map with ONLY it being "empty"
+					c.moveOnMap(); //coordinates are updated
+					
+					player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+				} else {
+					player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = false;
+					c.moveRandom();
+					player.ai.toAvoid[c.getx() - player.ai.topLeftX][c.gety() - player.ai.topLeftY] = true;
+
+				}
 				//player.ai.updateMap();
 			} else {
 				c.moveRandom();
@@ -127,7 +138,6 @@ public class Level {
 	public void addAiMap(Integer[][] aimap) {
 		this.aiMap = aimap;
 	}
-	//dont do this, justs check to draw the creature on the camera iteration
 
 	
 }

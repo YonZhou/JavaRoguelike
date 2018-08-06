@@ -15,13 +15,19 @@ public class World {
 	public int currentLevelCount;
 	public Player p;
 	public GameOverScreen ggScreen;
+	public ApplicationMain app;
+
 	
 	public World(Player p) {
 		this.levelList = new ArrayList<Level>();
 		this.levelGen = new LevelGenerator();
 		this.currentLevelCount = 0;
 		this.p = p;
-		this.ggScreen = new GameOverScreen(p.camera.p);
+		this.ggScreen = new GameOverScreen(this);
+	}
+	
+	public void setApp(ApplicationMain app) {
+		this.app = app;
 	}
 	
 	public void setBoundDimensions(int wM, int hM, int wm, int hm) {
@@ -51,6 +57,7 @@ public class World {
 	}
 	
 	public void reset() {
+		this.ggScreen = new GameOverScreen(this);
 		this.levelList.clear();
 		
 		currentLevelCount = -1;
@@ -61,6 +68,21 @@ public class World {
 		p.camera.renderCamera();
 
 	}
+	
+	public void close() {
+		app.setVisible(false);
+		app.dispose();
+		System.exit(0);
+	}
+	
+//	public void playerDeath() {
+//		boolean newGame = false;
+//		
+//		while(!newGame) {
+//			ggScreen.displayScreen();
+//			
+//		}
+//	}
 	
 
 }

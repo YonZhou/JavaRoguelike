@@ -13,6 +13,7 @@ public class Creature extends Entity{
 	public Level l;
 	public Camera camera;
 	public World world;
+	public int aggroFactor;
 	// add map
 	
 	public Creature(String string, int health, int level, char icon, int x, int y, Color c) {
@@ -48,7 +49,7 @@ public class Creature extends Entity{
 		
 		
 		if(checkForCollision(x+dx, y+dy)) {
-			if((this.getx() == l.player.getx( ) && this.gety() == l.player.gety())) {
+			if((this.getx()+dx == l.player.getx( ) && this.gety()+dy == l.player.gety())) {
 				attackPlayer();
 			}
 		} else {
@@ -167,7 +168,8 @@ public class Creature extends Entity{
 		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == null) {
 			moveRandom();
 			System.out.println(this.getx() + " + " + this.gety());
-			this.setColor(Color.BLUE);
+			//below for debugging only
+			//this.setColor(Color.BLUE);
 		}
 		  else {
 			  System.out.println(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY]);

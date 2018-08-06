@@ -19,6 +19,7 @@ public class Player extends Creature{
 		this.ai = new PathFindingAI(this);
 	}
 	
+	
 	public void setWorld(World w) {
 		this.world = w;
 	}
@@ -58,7 +59,7 @@ public class Player extends Creature{
 		}
 		
 		if(checkForCollision(x+dx, y+dy)) {
-			if(checkForFight()) {
+			if(checkForFight(x+dx, y+dy)) {
 				System.out.println("contact");
 				
 				l.clearEnemyMap();
@@ -104,9 +105,9 @@ public class Player extends Creature{
 		return false;
 	}
 	
-	public boolean checkForFight() {
-		if(l.enemyMap[this.getx()][this.gety()] != null) {
-			this.engagedCreature = l.enemyMap[this.getx()][this.gety()];
+	public boolean checkForFight(int xC, int yC) {
+		if(l.enemyMap[xC][yC] != null) {
+			this.engagedCreature = l.enemyMap[xC][yC];
 			return true;
 		}
 		return false;
@@ -121,8 +122,10 @@ public class Player extends Creature{
 	
 	@Override
 	public void die() {
-		resetStats();
-		this.world.reset();
+		//resetStats();
+		//this.world.reset();
+		this.world.ggScreen.displayScreen();
+		this.world.app.mainKeyListener.switchGameOver();
 	}
 	
 	public void resetStats() {

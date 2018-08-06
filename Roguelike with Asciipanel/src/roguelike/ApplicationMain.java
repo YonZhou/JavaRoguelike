@@ -1,6 +1,7 @@
 package roguelike;
 
 import javax.swing.JFrame;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,7 +12,7 @@ public class ApplicationMain extends JFrame{
     private static final long serialVersionUID = 1060623638149583738L;
 
     private AsciiPanel terminal;
-    private KeyHandler mainKeyListener;
+    public KeyHandler2 mainKeyListener;
     private Player Player;
     private MainGUI g;
     
@@ -20,21 +21,21 @@ public class ApplicationMain extends JFrame{
     
     public ApplicationMain() {
 	    //super();
-	    terminal = new AsciiPanel(TERMINAL_WIDTH,TERMINAL_HEIGHT,AsciiFont.TALRYTH_15_15);
+	    setTerminal(new AsciiPanel(TERMINAL_WIDTH,TERMINAL_HEIGHT,AsciiFont.TALRYTH_15_15));
 	    
 	    
 	    // world.setBoundDimensions(1000, 1000, TERMINAL_WIDTH, TERMINAL_HEIGHT);
 	    
 	    
-	    Player = new Player(100000, 1, 1, 1);
+	    this.Player = new Player(100, 1, 1, 1);
 	    
 	    //only needs to be called once
-	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, terminal);
+	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, getTerminal());
 	    Player.setCamera(camera);
 	    World world = new World(Player);
 	    Player.setWorld(world);
 	    
-	    
+	    world.setApp(this);
 	    world.setBoundDimensions(1000, 1000, 100, 100);
 	    world.createRWalkLevel();
 	    world.setCurrentLevel(world.levelList.get(0));
@@ -48,17 +49,17 @@ public class ApplicationMain extends JFrame{
 	    thirdLevel.setPlayer(Player);
 	    Player.addAtEmptyLocation(); //coordinates are initiated
 	    
-	    g = new MainGUI(terminal, Player, TERMINAL_WIDTH, Player.camera.topLeftY);
+	    g = new MainGUI(getTerminal(), Player, TERMINAL_WIDTH, Player.camera.topLeftY);
 	    
 	    Player.camera.renderCamera();
 	    
-	    mainKeyListener = new KeyHandler(Player, this);
-	    addKeyListener(mainKeyListener);
-	    
+	    //mainKeyListener = new KeyHandler(Player, this);
+	    //addKeyListener(mainKeyListener);
+	    mainKeyListener = new KeyHandler2(Player, this);
 	    
 	    
 	    System.out.println("Completed task 1");
-    	add(terminal);
+    	add(getTerminal());
     	pack();
     	repaint();
     }
@@ -69,7 +70,11 @@ public class ApplicationMain extends JFrame{
     	//re-draw everything that will stay on screen(not needed anymore?)
 //	    currentLevel.drawLevel(terminal);
 	    //Player.drawCreature();
-    	g.refresh();
+    	if(Player.isAlive)
+    		g.refresh();
+    	else {
+    		Player.world.ggScreen.displayScreen();
+    	}
     	super.repaint();
     }
     
@@ -81,5 +86,16 @@ public class ApplicationMain extends JFrame{
         app.setVisible(true);
         app.setTitle("Roguelike");
     }
+
+
+	public AsciiPanel getTerminal() {
+		return terminal;
+	}
+
+
+	public void setTerminal(AsciiPanel terminal) {
+		this.terminal = terminal;
+	}
+	
 
 }
