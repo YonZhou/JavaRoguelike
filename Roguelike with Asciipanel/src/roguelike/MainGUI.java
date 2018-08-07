@@ -3,8 +3,8 @@ package roguelike;
 import asciiPanel.AsciiPanel;
 
 public class MainGUI extends AsciiPanel{
-	public int topLeftX;
-	public int topLeftY;
+	private int topLeftX = 0;
+	private int topLeftY = 0;
 	private AsciiPanel panel;
 	private Player player;
 	private int width;
@@ -19,7 +19,7 @@ public class MainGUI extends AsciiPanel{
 	
 	public void drawLine() {
 		for(int i=0; i< this.width; i++) {
-			panel.write('-', i, topLeftY + height);
+			panel.write('-', i, topLeftY + height - 1);
 		}
 	}
 	
@@ -33,9 +33,9 @@ public class MainGUI extends AsciiPanel{
 	}
 	
 	public void refresh() {
-		drawLine();
 		displayPlayerHealth();
 		displayLevelCount();
+		drawLine();
 	}
 
 }

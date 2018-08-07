@@ -25,11 +25,11 @@ public class KeyHandler2 {
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("A"), "leftKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "EnterKey");
 		
+		//everything above this line should stay in setup
 		
-		a.getTerminal().getActionMap().put("downKey", new PlayerMovementAction(0, 1));
-		a.getTerminal().getActionMap().put("upKey", new PlayerMovementAction(0, -1));
-		a.getTerminal().getActionMap().put("rightKey", new PlayerMovementAction(1, 0));
-		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
+		//rebindPlayerMovement();
+		rebindStartMenuMovement();
+		
 		
 		//2 calls below dont do anything???
 		//p.camera.renderCamera();
@@ -39,15 +39,30 @@ public class KeyHandler2 {
 	}
 	
 	public void switchGameOver() {
-		a.getTerminal().getActionMap().put("downKey", new EndGameSelectDown());
-		a.getTerminal().getActionMap().put("upKey", new EndGameSelectUp());
-		a.getTerminal().getActionMap().put("rightKey", null);
-		a.getTerminal().getActionMap().put("leftKey", null);
+		clearMovementKeys();
+		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.ggScreen));
+		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.ggScreen));
+//		a.getTerminal().getActionMap().put("rightKey", null);
+//		a.getTerminal().getActionMap().put("leftKey", null);
 		a.getTerminal().getActionMap().put("EnterKey", new EndGameSelect());
 	}
 	
+	public void clearMovementKeys() {
+		a.getTerminal().getActionMap().put("downKey", null);
+		a.getTerminal().getActionMap().put("upKey", null);
+		a.getTerminal().getActionMap().put("rightKey", null);
+		a.getTerminal().getActionMap().put("leftKey", null);
+	}
 	
-	public void clearEndGameAction() {
+	public void rebindStartMenuMovement() {
+		clearMovementKeys();
+		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.startMenu));
+		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.startMenu));
+		a.getTerminal().getActionMap().put("EnterKey", new startMenuAction());
+	}
+	
+	
+	public void clearEnterKey() {
 		a.getTerminal().getActionMap().put("EnterKey", null);
 	}
 	public void rebindPlayerMovement() {
@@ -70,28 +85,45 @@ public class KeyHandler2 {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			if(p.isAlive) {
-				p.moveCreature(x, y);
-				p.camera.renderCamera();
-				a.repaint();
-		        System.out.println("Player x " + p.x);
-		        System.out.println("Player y " + p.y);
-			}
+			p.moveCreature(x, y);
+			
+			
+			p.camera.renderCamera();
+			
+			//this should come last, or else the death screen will be rendered first and overwritten by p.camera.render
+			p.checkDeath();
+			
+	        System.out.println("Player x " + p.x);
+	        System.out.println("Player y " + p.y);
 		}
 
 		
 	}
 	
+	class startMenuAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			int actionChecked = p.world.startMenu.checkOption();
+			
+			if(actionChecked == 0) {
+				rebindPlayerMovement();
+				clearEnterKey();
+			}
+			
+		}
+		
+	}
+	
 	class EndGameSelect extends AbstractAction{
 
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int actionChecked = p.world.ggScreen.checkOption();
 			
 			if(actionChecked == 0) {
 				rebindPlayerMovement();
-				clearEndGameAction();
+				clearEnterKey();
 			}
 			
 			//p.world.ggScreen.displayScreen();
@@ -100,21 +132,33 @@ public class KeyHandler2 {
 		
 	}
 	
-	class EndGameSelectUp extends AbstractAction{
+	class ScreenSelectUp extends AbstractAction{
+		
+		private MenuScreen menuscreen;
+
+		public ScreenSelectUp(MenuScreen ms) {
+			this.menuscreen = ms;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			p.world.ggScreen.moveUp();
+			p.world.moveUp(menuscreen);
 			System.out.println("moved up");
 		}
 		
 	}
 	
-	class EndGameSelectDown extends AbstractAction{
+	class ScreenSelectDown extends AbstractAction{
+		
+		private MenuScreen menuscreen;
+
+		public ScreenSelectDown(MenuScreen ms) {
+			this.menuscreen = ms;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			p.world.ggScreen.moveDown();
+			p.world.moveDown(menuscreen);
 		}
 		
 	}

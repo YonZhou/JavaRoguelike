@@ -80,10 +80,10 @@ public class Player extends Creature{
 		
 		l.moveAllCreatures();
 		
-		checkDeath();
+		//this function should be somewhere else?
+		//checkDeath();
 		
 		world.gui.refresh();
-		
 	}
 	
 	public void checkDeath() {
@@ -127,7 +127,10 @@ public class Player extends Creature{
 	public void die() {
 		//resetStats();
 		//this.world.reset();
+		
+		//the bottom 2 get over-ridden by the repaint in the player move keyhandler that comes right after move
 		this.world.ggScreen.displayScreen();
+		this.world.app.repaint();
 		this.world.app.mainKeyListener.switchGameOver();
 	}
 	

@@ -14,14 +14,15 @@ public class ExitTile extends WalkableTile{
 		p.setLevel(l);
 	}
 	
-	public void addAtEmptyLocation(Level l) {
-		int max = l.walkabletileList.size();
-			
-		Random r = new Random();
-			
-		int randomIndex = r.nextInt(max);
-			
-		this.x = l.walkabletileList.get(randomIndex).getx();
-		this.y = l.walkabletileList.get(randomIndex).gety();
-	}
+	//this function is written in the level generator
+//	public void addAtEmptyLocation(Level l) {
+//		int max = l.walkabletileList.size();
+//			
+//		Random r = new Random();
+//			
+//		int randomIndex = r.nextInt(max);
+//			
+//		this.x = l.walkabletileList.get(randomIndex).getx();
+//		this.y = l.walkabletileList.get(randomIndex).gety();
+//	}
 }

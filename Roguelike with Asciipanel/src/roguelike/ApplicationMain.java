@@ -34,10 +34,10 @@ public class ApplicationMain extends JFrame{
 	    //only needs to be called once
 	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, getTerminal());
 	    Player.setCamera(camera);
-	    this.world = new World(Player);
+	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
+	    this.world = new World(Player, this);
 	    Player.setWorld(world);
 	    
-	    world.setApp(this);
 	    world.setBoundDimensions(100, 100, 100, 100);
 	    
 //	    world.createRWalkLevel(); //after menu screen
@@ -45,7 +45,6 @@ public class ApplicationMain extends JFrame{
 //	    
 //	    Level firstLevel = world.currentlevel; //after menu screen
 	    //Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT - 10, 0, 10);
-	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
 	    
 	    //camera level is set along with camera
 	    
@@ -53,7 +52,10 @@ public class ApplicationMain extends JFrame{
 //	    firstLevel.setPlayer(Player); //after menu screen
 //	    Player.addAtEmptyLocation(); //after menu screen
 	    
-	    newGame(); //TODO
+	    
+	    //newGame(); //TODO
+	    
+	    world.startMenu.displayScreen();
 	    
 	    
 //	    Player.camera.renderCamera();//after menu screen
@@ -69,19 +71,21 @@ public class ApplicationMain extends JFrame{
     	repaint();
     }
     
-    
-    @Override
-    public void repaint() {
-    	//re-draw everything that will stay on screen(not needed anymore?)
-//	    currentLevel.drawLevel(terminal);
-	    //Player.drawCreature();
-    	
-    	//player.isalive draw function should be somewhere else
-    	if(!Player.isAlive) {
-    		Player.world.ggScreen.displayScreen();
-    	}
-    	super.repaint();
-    }
+//    
+//    @Override
+//    public void repaint() {
+//    	//re-draw everything that will stay on screen(not needed anymore?)
+////	    currentLevel.drawLevel(terminal);
+//	    //Player.drawCreature();
+//    	
+//    	//player.isalive draw function should be somewhere else, shouldnt need to check everytime
+//    	
+//    	//TODO: for some reason ggscreen will not update until another movement is called
+////    	if(!Player.isAlive) {
+////    		Player.world.ggScreen.displayScreen();
+////    	}
+//    	super.repaint();
+//    }
     
 
 

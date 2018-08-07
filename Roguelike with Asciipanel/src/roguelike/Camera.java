@@ -77,6 +77,7 @@ public class Camera{
 		}
 		
 		p.write(player.getID(), topLeftX + (width / 2),topLeftY + (height / 2));
+		player.world.app.repaint();
 	}
 	
 	
