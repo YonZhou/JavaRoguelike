@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import Tiles.ExitTile;
+import Tiles.Tiles;
 import asciiPanel.AsciiPanel;
+import items.Item;
 
 
 public class Level {
 	public ArrayList<Tiles> tileList;
 	public ArrayList<Creature> enemyList;
 	public Creature[][] enemyMap;
+	public ArrayList<Item> itemList;
+	public Item[][] itemMap;
 	//public ArrayList<Level> levels; add this in another class
 	public Entity[][] Map;
 	public ArrayList<Entity> FreeTileList;
@@ -132,6 +137,13 @@ public class Level {
 
 			enemyMap[c.getx()][c.gety()] = c;
 		}
+	}
+	
+	public void deleteItem(int x, int y) {
+		Item itemtodelete = itemMap[x][y];
+		
+		itemList.remove(itemtodelete);
+		itemMap[x][y] = null;
 	}
 	
 	

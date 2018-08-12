@@ -1,7 +1,10 @@
-package roguelike;
+package menus;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import roguelike.ApplicationMain;
+import roguelike.PanelText;
 
 public class StartMenu extends MenuScreen{
 	private ApplicationMain app;
@@ -19,6 +22,7 @@ public class StartMenu extends MenuScreen{
 		
 		app.getTerminal().clear();
 		
+		app.getTerminal().write("Roguelike", 40, 15, Color.LIGHT_GRAY);
 		app.getTerminal().write(textList.get(0).text, 40, 25, textList.get(0).getColor());
 		app.getTerminal().write(textList.get(1).text, 40, 26, textList.get(1).getColor());
 		

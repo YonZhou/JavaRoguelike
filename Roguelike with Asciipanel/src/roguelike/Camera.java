@@ -60,18 +60,29 @@ public class Camera{
 			for(int j = topLeftY; j < this.height; j++) {
 				//NEED TO CREATE CHECK THAT CAN WRITE ON ASCIIPANEL(or maybe not?)
 				
+				int mapCheckX = i + startx - topLeftX;
+				int mapCheckY = j + starty - topLeftY;
+				
 				//check for out of bounds on map
-				if(i + startx - topLeftX< 0 || i + startx - topLeftX > l.width - 1|| j + starty - topLeftY < 0 || j + starty - topLeftY> l.height - 1) {
+				if(mapCheckX< 0 || mapCheckX > l.width - 1|| mapCheckY < 0 || mapCheckY> l.height - 1) {
 					p.write(' ', i, j);
-				} else if(l.charMap[startx + i - topLeftX][starty + j - topLeftY] == null) {
+				} else if(l.charMap[mapCheckX][mapCheckY] == null) {
 					p.write(' ', i, j);
 				} else {
-					p.write(l.charMap[startx + i - topLeftX][starty + j - topLeftY].getID(), i, j, l.charMap[startx + i - topLeftX][starty + j - topLeftY].getColor());
+					p.write(l.charMap[mapCheckX][mapCheckY].getID(), i, j, l.charMap[mapCheckX][mapCheckY].getColor());
 					
-					//check for enemies on the map and add them at subsequent locations
-					if(l.enemyMap[startx + i - topLeftX][starty + j - topLeftY] != null) {
-						p.write(l.enemyMap[startx + i - topLeftX][starty + j - topLeftY].getID(),i,j,l.enemyMap[startx + i - topLeftX][starty + j - topLeftY].getColor());
+					
+					
+					if(l.itemMap[mapCheckX][mapCheckY] != null) {
+						p.write(l.itemMap[mapCheckX][mapCheckY].getID(),i ,j ,l.itemMap[mapCheckX][mapCheckY].getColor());
 					}
+					//check for enemies on the map and add them at subsequent locations(put in another function?)
+					if(l.enemyMap[mapCheckX][mapCheckY] != null) {
+						p.write(l.enemyMap[mapCheckX][mapCheckY].getID(),i ,j ,l.enemyMap[mapCheckX][mapCheckY].getColor());
+					}
+					
+					
+					
 				}
 			}
 		}

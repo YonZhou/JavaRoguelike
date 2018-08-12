@@ -1,4 +1,4 @@
-package roguelike;
+package Tiles;
 
 import java.awt.Color;
 

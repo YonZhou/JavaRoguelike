@@ -7,7 +7,7 @@ import asciiPanel.AsciiPanel;
 public class Creature extends Entity{
 	public int health;
 	public int level;
-	private String name;
+	public String name;
 	public char icon;
 	public Color c;
 	public Level l;
@@ -92,7 +92,11 @@ public class Creature extends Entity{
 //	}
 	
 	public void attackPlayer() {
-		this.l.player.health -= 10;
+		int damage = 10;
+		this.l.player.health -= damage;
+		
+		l.player.world.gui.addToActionPanel(new PanelText(this.name + " hits you for " + damage));
+		
 	}
 	
 

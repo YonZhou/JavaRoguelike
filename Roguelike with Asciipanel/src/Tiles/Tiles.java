@@ -1,7 +1,8 @@
-package roguelike;
+package Tiles;
 import java.awt.Color;
 
 import asciiPanel.AsciiPanel;
+import roguelike.Entity;
 
 
 public class Tiles extends Entity{

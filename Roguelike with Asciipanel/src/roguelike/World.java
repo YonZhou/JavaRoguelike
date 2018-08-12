@@ -3,6 +3,11 @@ package roguelike;
 import java.util.ArrayList;
 import java.util.Random;
 
+import menus.GameOverScreen;
+import menus.InventoryScreen;
+import menus.MenuScreen;
+import menus.StartMenu;
+
 public class World {
 	
 	public ArrayList<Level> levelList;
@@ -15,6 +20,7 @@ public class World {
 	public int currentLevelCount;
 	public Player p;
 	public GameOverScreen ggScreen;
+	public InventoryScreen invScreen;
 	public StartMenu startMenu;
 	public ApplicationMain app;
 	public MainGUI gui;
@@ -28,6 +34,7 @@ public class World {
 		this.currentLevelCount = -1;
 		this.p = p;
 		this.ggScreen = new GameOverScreen(this);
+		this.invScreen = new InventoryScreen(this);
 		this.gui = new MainGUI(p.camera.p, p, app.TERMINAL_WIDTH, p.camera.topLeftY);
 	}
 	
@@ -64,6 +71,7 @@ public class World {
 	
 	public void reset() {
 		this.levelList.clear();
+		gui.clearActionPanelList();
 		
 		currentLevelCount = -1;
 		

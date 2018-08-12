@@ -1,7 +1,10 @@
-package roguelike;
+package Tiles;
 
 import java.awt.Color;
 import java.util.Random;
+
+import roguelike.Level;
+import roguelike.Player;
 
 public class ExitTile extends WalkableTile{
 

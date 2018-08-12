@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
+import menus.MenuScreen;
+
 public class KeyHandler2 {
 	private Player p;
 	private ApplicationMain a;
@@ -24,6 +26,7 @@ public class KeyHandler2 {
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("D"), "rightKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("A"), "leftKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "EnterKey");
+		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "SpaceKey");
 		
 		//everything above this line should stay in setup
 		
@@ -70,6 +73,17 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("upKey", new PlayerMovementAction(0, -1));
 		a.getTerminal().getActionMap().put("rightKey", new PlayerMovementAction(1, 0));
 		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
+		a.getTerminal().getActionMap().put("SpaceKey", new PlayerPickupAction());
+	}
+	
+	class PlayerPickupAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			p.pickUpItem();
+			a.repaint();
+		}
+		
 	}
 	
 	

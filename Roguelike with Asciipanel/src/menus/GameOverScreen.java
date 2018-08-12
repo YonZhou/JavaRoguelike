@@ -1,10 +1,11 @@
-package roguelike;
+package menus;
 
 import java.awt.Color;
 import java.util.ArrayList;
 
 import asciiPanel.AsciiPanel;
-//REMEMBER TO REPAINT
+import roguelike.PanelText;
+import roguelike.World;
 
 public class GameOverScreen extends MenuScreen{
 	private AsciiPanel a;

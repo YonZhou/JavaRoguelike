@@ -46,6 +46,10 @@ public class Entity {
 		return this.ch;
 	}
 	
+	public void setID(char ch) {
+		this.ch = ch;
+	}
+	
 	public Color getColor() {
 		return this.c;
 	}

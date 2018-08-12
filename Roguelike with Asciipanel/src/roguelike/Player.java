@@ -1,22 +1,31 @@
 package roguelike;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Random;
+
+import items.Item;
+import items.Weapon;
 
 
 public class Player extends Creature{
 
 	private Creature engagedCreature;
+	private final int BASE_HEALTH = 100;
 	public int aggroWidth;
 	public int aggroHeight;
 	public PathFindingAI ai;
 	public boolean isAlive = true;
+	public Inventory inv;
+	public Weapon equippedWeapon;
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
 		this.aggroWidth = 99;
 		this.aggroHeight = 99;
 		this.ai = new PathFindingAI(this);
+		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+		this.inv = new Inventory();
 	}
 	
 	
@@ -117,9 +126,50 @@ public class Player extends Creature{
 	}
 	
 	public void attack(Creature other) {
-		other.health -= 50;
+		Random r = new Random();
+		
+		int max = 50 + equippedWeapon.getAttack();
+		int min = 50 + equippedWeapon.getAttack();
+		
+		int damageDealt = r.nextInt(max - min + 1) + min;
+		
+		this.world.gui.addToActionPanel(new PanelText("You hit "+ engagedCreature.name + " for " + damageDealt));
+		
+		other.health -= damageDealt;
 		if(other.health <= 0) {
 			other.die();
+			this.world.gui.addToActionPanel(new PanelText("You kill the " + engagedCreature.name, Color.RED));
+		}
+	}
+	
+	public boolean checkForItem(int xC, int yC) {
+		if(l.itemMap[xC][yC] != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void pickUpItem() {
+		if(checkForItem(this.x, this.y)) {
+			Item itempickedup = l.itemMap[this.x][this.y];
+			
+			this.inv.itemList.add(itempickedup);
+			
+			
+			//delete this line later TODO
+			this.equippedWeapon = (Weapon)itempickedup;
+			
+			world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " + " + itempickedup.level , Color.YELLOW));
+			world.gui.refresh();
+			
+			l.deleteItem(this.x, this.y);
+			
+			l.moveAllCreatures();
+			world.gui.refresh();
+			
+		} else {
+			world.gui.addToActionPanel(new PanelText("No Item!" , Color.ORANGE));
+			world.gui.refresh();
 		}
 	}
 	
@@ -135,7 +185,11 @@ public class Player extends Creature{
 	}
 	
 	public void resetStats() {
-		this.health = 100;
+		this.health = this.BASE_HEALTH;
+		
+		this.inv.clear();
+		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+		
 		this.isAlive = true;
 	}
 	

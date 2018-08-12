@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Tiles.ExitTile;
+import Tiles.Tiles;
+import Tiles.WalkableTile;
+import Tiles.WallTile;
 import asciiPanel.AsciiPanel;
+import items.Item;
+import items.Sword;
 
 //generate map with tiles -> place creature -> place player
 
@@ -15,9 +21,7 @@ public class LevelGenerator {
 	private int height;
 	private int width;
 	public Entity[][] map;
-	private ArrayList<Rectangle> rectangleList;
 	public ArrayList<Tiles> tileslist;
-	public ArrayList<Entity> freetilelist;
 
 	
 	public LevelGenerator() {
@@ -73,8 +77,11 @@ public class LevelGenerator {
 		Level generatedLevel = new Level("test", map, tilelist, freetilelist, cMap, dif, width, height);
 		generatedLevel.enemyMap = EnemyMap;
 		generatedLevel.enemyList = enemylist;
+		generatedLevel.itemList = new ArrayList<Item>();
+		generatedLevel.itemMap = new Item[width][height];
 		
 		generateCreatures(generatedLevel);
+		generateItems(generatedLevel);
 		
 		
 		return generatedLevel;
@@ -259,6 +266,38 @@ public class LevelGenerator {
 //				walkabletileslist.add((WalkableTile) map[w][h]);
 			}
 		}
+	}
+	
+	public void generateItems(Level level) {
+		
+		for(int i=0; i<10; i++) {
+			int max = level.FreeTileList.size();
+			
+			Random r = new Random();
+			
+			int randomIndex = r.nextInt(max); //index of random freetile to write exit to
+			
+			WalkableTile wTile = (WalkableTile) level.FreeTileList.get(randomIndex);
+			
+			int x = wTile.getx();
+			int y = wTile.gety();
+			
+			int swordLevel = r.nextInt(5) + 1;
+			
+			Sword sword = new Sword(x, y, swordLevel);
+			
+			level.itemList.add(sword);
+			level.itemMap[x][y] = sword;
+			
+			level.FreeTileList.remove(randomIndex);
+			
+			
+			
+		}
+	}
+	
+	public void smooth() {
+		
 	}
 	
 }

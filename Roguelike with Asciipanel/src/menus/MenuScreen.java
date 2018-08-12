@@ -1,7 +1,9 @@
-package roguelike;
+package menus;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import roguelike.PanelText;
 
 public abstract class MenuScreen {
 	public ArrayList<PanelText> textList;

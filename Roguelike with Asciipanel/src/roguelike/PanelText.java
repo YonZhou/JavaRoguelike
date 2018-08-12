@@ -11,6 +11,11 @@ public class PanelText {
 		this.c = c;
 	}
 	
+	public PanelText(String s) {
+		this.text = s;
+		this.c = Color.WHITE;
+	}
+	
 	public void setColor(Color color) {
 		this.c = color;
 	}
