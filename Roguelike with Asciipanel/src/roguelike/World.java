@@ -33,9 +33,12 @@ public class World {
 		this.levelGen = new LevelGenerator();
 		this.currentLevelCount = -1;
 		this.p = p;
+		
+		
+		this.gui = new MainGUI(p.camera.p, p, app.TERMINAL_WIDTH, p.camera.topLeftY);
 		this.ggScreen = new GameOverScreen(this);
 		this.invScreen = new InventoryScreen(this);
-		this.gui = new MainGUI(p.camera.p, p, app.TERMINAL_WIDTH, p.camera.topLeftY);
+
 	}
 	
 //	public void setApp(ApplicationMain app) {

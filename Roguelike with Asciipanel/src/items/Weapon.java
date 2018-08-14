@@ -2,6 +2,8 @@ package items;
 
 import java.awt.Color;
 
+
+//make guns that have selection 
 public class Weapon extends Item{
 	private int attack;
 

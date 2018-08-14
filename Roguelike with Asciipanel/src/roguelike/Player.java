@@ -11,7 +11,7 @@ import items.Weapon;
 public class Player extends Creature{
 
 	private Creature engagedCreature;
-	private final int BASE_HEALTH = 100;
+	public static final int BASE_HEALTH = 100;
 	public int aggroWidth;
 	public int aggroHeight;
 	public PathFindingAI ai;
@@ -26,6 +26,8 @@ public class Player extends Creature{
 		this.ai = new PathFindingAI(this);
 		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
 		this.inv = new Inventory();
+		
+		this.inv.itemList.add(equippedWeapon);
 	}
 	
 	
@@ -151,21 +153,23 @@ public class Player extends Creature{
 	
 	public void pickUpItem() {
 		if(checkForItem(this.x, this.y)) {
-			Item itempickedup = l.itemMap[this.x][this.y];
-			
-			this.inv.itemList.add(itempickedup);
-			
-			
-			//delete this line later TODO
-			this.equippedWeapon = (Weapon)itempickedup;
-			
-			world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " + " + itempickedup.level , Color.YELLOW));
-			world.gui.refresh();
-			
-			l.deleteItem(this.x, this.y);
-			
-			l.moveAllCreatures();
-			world.gui.refresh();
+			if(inv.itemList.size() < inv.maxInvSize) {
+				Item itempickedup = l.itemMap[this.x][this.y];
+				
+				this.inv.itemList.add(itempickedup);
+				
+				
+				
+				world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " + " + itempickedup.level , Color.YELLOW));
+				
+				l.deleteItem(this.x, this.y);
+				
+				l.moveAllCreatures();
+				world.gui.refresh();
+			} else {
+				world.gui.addToActionPanel(new PanelText("Full inventory space!", Color.RED));
+				world.gui.refresh();
+			}
 			
 		} else {
 			world.gui.addToActionPanel(new PanelText("No Item!" , Color.ORANGE));
@@ -185,10 +189,13 @@ public class Player extends Creature{
 	}
 	
 	public void resetStats() {
-		this.health = this.BASE_HEALTH;
-		
+		this.health = BASE_HEALTH;
+
 		this.inv.clear();
+		world.invScreen.clearTextList();
+		
 		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+		this.inv.itemList.add(equippedWeapon);
 		
 		this.isAlive = true;
 	}

@@ -28,7 +28,7 @@ public class ApplicationMain extends JFrame{
 	    // world.setBoundDimensions(1000, 1000, TERMINAL_WIDTH, TERMINAL_HEIGHT);
 	    
 	    
-	    this.Player = new Player(100, 1, 1, 1);
+	    this.Player = new Player(Player.BASE_HEALTH, 1, 1, 1);
 	    Player.isAlive = false; //to erase the GUI, but maybe need better method since gameover pops up whoops
 	    
 	    //only needs to be called once

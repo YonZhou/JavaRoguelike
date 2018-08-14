@@ -27,6 +27,7 @@ public class KeyHandler2 {
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("A"), "leftKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "EnterKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "SpaceKey");
+		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("I"), "IKey");
 		
 		//everything above this line should stay in setup
 		
@@ -42,7 +43,7 @@ public class KeyHandler2 {
 	}
 	
 	public void switchGameOver() {
-		clearMovementKeys();
+		clearPlayerKeys();
 		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.ggScreen));
 		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.ggScreen));
 //		a.getTerminal().getActionMap().put("rightKey", null);
@@ -57,8 +58,14 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("leftKey", null);
 	}
 	
-	public void rebindStartMenuMovement() {
+	public void clearPlayerKeys() {
 		clearMovementKeys();
+		a.getTerminal().getActionMap().put("IKey", null);
+		a.getTerminal().getActionMap().put("SpaceKey", null);
+	}
+	
+	public void rebindStartMenuMovement() {
+		clearPlayerKeys();
 		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.startMenu));
 		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.startMenu));
 		a.getTerminal().getActionMap().put("EnterKey", new startMenuAction());
@@ -74,6 +81,43 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("rightKey", new PlayerMovementAction(1, 0));
 		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
 		a.getTerminal().getActionMap().put("SpaceKey", new PlayerPickupAction());
+		a.getTerminal().getActionMap().put("IKey", new OpenInventoryAction());
+	}
+	
+	public void switchInventoryKeys() {
+		clearPlayerKeys();
+		a.getTerminal().getActionMap().put("IKey", new CloseInventoryAction());
+		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.invScreen));
+		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.invScreen));
+		a.getTerminal().getActionMap().put("EnterKey", new InventorySelect());
+		a.getTerminal().getActionMap().put("SpaceKey", new InventorySelect());
+	}
+	
+	class OpenInventoryAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchInventoryKeys();
+			p.world.invScreen.openInvScreen();
+		}
+		
+	}
+	
+	
+	//TODO
+	class CloseInventoryAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//erase the inventory layer
+			a.world.gui.refresh();
+			p.camera.renderCamera();
+			
+			a.getTerminal().getActionMap().put("EnterKey", null);
+			rebindPlayerMovement();
+			
+		}
+		
 	}
 	
 	class PlayerPickupAction extends AbstractAction{
@@ -157,7 +201,7 @@ public class KeyHandler2 {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			p.world.moveUp(menuscreen);
-			System.out.println("moved up");
+			//System.out.println("moved up");
 		}
 		
 	}
@@ -173,6 +217,16 @@ public class KeyHandler2 {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			p.world.moveDown(menuscreen);
+		}
+		
+	}
+	
+	class InventorySelect extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int actionChecked = p.world.invScreen.checkOption();
+			
 		}
 		
 	}

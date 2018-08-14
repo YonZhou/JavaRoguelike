@@ -8,12 +8,12 @@ import asciiPanel.AsciiPanel;
 public class MainGUI extends AsciiPanel{
 	public final int ACTIONPANEL_MAX_SIZE = 5;
 	
-	private int topLeftX = 0;
-	private int topLeftY = 0;
+	public int topLeftX = 0;
+	public int topLeftY = 0;
 	private AsciiPanel panel;
 	private Player player;
-	private int width;
-	private int height;
+	public int width;
+	public int height;
 	public LinkedList<PanelText> actionPanel;
 	
 	public MainGUI(AsciiPanel a, Player p, int width, int height) {

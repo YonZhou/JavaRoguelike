@@ -19,21 +19,25 @@ public abstract class MenuScreen {
 	}
 	
 	public void moveDown() {
-		clearColors();
-		textIndex++;
-		textIndex = textIndex % (textList.size());
-		textList.get(textIndex).setColor(Color.WHITE);
-		displayScreen();
+		if(textList.size() > 0) {
+			clearColors();
+			textIndex++;
+			textIndex = textIndex % (textList.size());
+			textList.get(textIndex).setColor(Color.WHITE);
+			displayScreen();
+		}
 	}
 	
 	public void moveUp() {
-		clearColors();
-		textIndex--;
-		if(textIndex < 0) {
-			textIndex = textList.size() - 1;
+		if(textList.size() > 0) {
+			clearColors();
+			textIndex--;
+			if(textIndex < 0) {
+				textIndex = textList.size() - 1;
+			}
+			textList.get(textIndex).setColor(Color.WHITE);
+			displayScreen();
 		}
-		textList.get(textIndex).setColor(Color.WHITE);
-		displayScreen();
 	}
 
 }
