@@ -38,7 +38,7 @@ public class ApplicationMain extends JFrame{
 	    this.world = new World(Player, this);
 	    Player.setWorld(world);
 	    
-	    world.setBoundDimensions(100, 100, 100, 100);
+	    world.setBoundDimensions(1000, 1000, 100, 100);
 	    
 //	    world.createRWalkLevel(); //after menu screen
 //	    world.setCurrentLevel(world.levelList.get(0)); //after menu screen
@@ -116,7 +116,7 @@ public class ApplicationMain extends JFrame{
 		Player.setLevel(world.levelList.get(0));
 		world.levelList.get(0).setPlayer(Player);
 		Player.addAtEmptyLocation();
-		Player.camera.renderCamera();
+		Player.camera.renderCamera(Player);
 		world.gui.refresh();
 	}
 

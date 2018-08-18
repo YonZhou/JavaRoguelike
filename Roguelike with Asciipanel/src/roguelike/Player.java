@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+import items.Gun;
+import items.HealthPotion;
 import items.Item;
 import items.Weapon;
 
@@ -18,12 +20,17 @@ public class Player extends Creature{
 	public boolean isAlive = true;
 	public Inventory inv;
 	public Weapon equippedWeapon;
+	public ArrayList<Entity> enemiesInRange;
+	public int index;
+	
 
 	public Player(int health, int level, int x, int y) {
 		super("Player", health, level, '@', x, y, Color.WHITE);
 		this.aggroWidth = 99;
 		this.aggroHeight = 99;
 		this.ai = new PathFindingAI(this);
+		this.enemiesInRange = new ArrayList<Entity>();
+		
 		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
 		this.inv = new Inventory();
 		
@@ -67,7 +74,7 @@ public class Player extends Creature{
 			Level nextL = world.nextLevel(); 
 			setLevel(nextL);
 //			nextL.setPlayer(this);
-			this.camera.renderCamera();
+			this.camera.renderCamera(this);
 		}
 		
 		if(checkForCollision(x+dx, y+dy)) {
@@ -190,6 +197,7 @@ public class Player extends Creature{
 	
 	public void resetStats() {
 		this.health = BASE_HEALTH;
+		this.maxHealth = BASE_HEALTH;
 
 		this.inv.clear();
 		world.invScreen.clearTextList();
@@ -198,6 +206,57 @@ public class Player extends Creature{
 		this.inv.itemList.add(equippedWeapon);
 		
 		this.isAlive = true;
+	}
+	
+	public void use(Item item) {
+		if(item instanceof HealthPotion) {
+			healHealth(((HealthPotion) item).getHealingFactor());
+			this.world.invScreen.useItem();
+		}
+		
+	}
+	
+	public void updateEnemiesInRange() {
+		int range = ((Gun) (equippedWeapon)).getRange();
+		
+		int topLeftX = this.x - range;
+		int topLeftY = this.y - range;
+		
+		
+		//should check if something is blocking them
+		
+		for(int i= topLeftX; i< range*2; i++) {
+			for(int j = topLeftY; j< range*2; j++) {
+				if(l.enemyMap[i][j] != null ) {
+					enemiesInRange.add(l.enemyMap[i][j]);
+				}
+			}
+		}
+	}
+	
+	public void switchFocusLeft() {
+		this.index--;
+		camera.setCoordinates((Creature) enemiesInRange.get(index));
+	}
+	
+	public void switchFocusRight() {
+		this.index++;
+		camera.setCoordinates((Creature) enemiesInRange.get(index));
+	}
+	
+	public void setupShoot() {
+		this.enemiesInRange = new ArrayList<Entity>();
+		updateEnemiesInRange();
+		this.index = 0;
+		
+		if(enemiesInRange.size() > 0) {
+			Entity focusedEnemy = enemiesInRange.get(index);
+		}
+	}
+	
+	public void shoot() {
+		
+
 	}
 	
 

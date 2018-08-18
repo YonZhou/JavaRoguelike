@@ -10,6 +10,7 @@ import Tiles.Tiles;
 import Tiles.WalkableTile;
 import Tiles.WallTile;
 import asciiPanel.AsciiPanel;
+import items.HealthPotion;
 import items.Item;
 import items.Sword;
 
@@ -92,7 +93,12 @@ public class LevelGenerator {
 		int free = level.FreeTileList.size();
 		
 		Random r = new Random();
-		int numToGenerate = r.nextInt((int) (Math.sqrt(free)) - (int) (Math.sqrt(free)*0.5) + 1) + (int) (Math.sqrt(free)*0.5);
+		
+		int max = (int) (Math.sqrt(free)*0.5);
+		int min = (int) (Math.sqrt(free)*0.25);
+		
+		
+		int numToGenerate = r.nextInt(max - min + 1) + min;
 	
 		//use for testing 
 //		int numToGenerate = 5; 
@@ -269,11 +275,14 @@ public class LevelGenerator {
 	}
 	
 	public void generateItems(Level level) {
+		Random r = new Random();
 		
-		for(int i=0; i<10; i++) {
+		int numToGenerate = r.nextInt((int) level.FreeTileList.size() / 200 - (int) level.FreeTileList.size() / 300  + 1) + (int) level.FreeTileList.size() / 300;
+		
+		
+		for(int i=0; i< numToGenerate; i++) {
 			int max = level.FreeTileList.size();
 			
-			Random r = new Random();
 			
 			int randomIndex = r.nextInt(max); //index of random freetile to write exit to
 			
@@ -282,16 +291,25 @@ public class LevelGenerator {
 			int x = wTile.getx();
 			int y = wTile.gety();
 			
-			int swordLevel = r.nextInt(5) + 1;
+			if(r.nextInt(5) > 0) {
 			
-			Sword sword = new Sword(x, y, swordLevel);
-			
-			level.itemList.add(sword);
-			level.itemMap[x][y] = sword;
+				int swordLevel = r.nextInt(5) + 1;
+				
+				Sword sword = new Sword(x, y, swordLevel);
+				
+				level.itemList.add(sword);
+				level.itemMap[x][y] = sword;
+				
+			} else {
+				int potionLevel = r.nextInt(5) + 1;
+				
+				HealthPotion potion = new HealthPotion(x, y, potionLevel);
+				
+				level.itemList.add(potion);
+				level.itemMap[x][y] = potion;
+			}
 			
 			level.FreeTileList.remove(randomIndex);
-			
-			
 			
 		}
 	}

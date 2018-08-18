@@ -38,14 +38,14 @@ public class Camera{
 		this.l = Player.l;
 	}
 	
-	public void setCoordinates() {
-		this.x = player.getx();
-		this.y = player.gety();
+	public void setCoordinates(Creature c) {
+		this.x = c.getx();
+		this.y = c.gety();
 	}
 	
 	
-	public void renderCamera() {
-		setCoordinates();
+	public void renderCamera(Creature c) {
+		setCoordinates(c);
 		
 		//coordinates of top-left ON MAP, pure, width and height are size of camera
 		//used to get reference coordinates for top left block to write
@@ -76,6 +76,7 @@ public class Camera{
 					if(l.itemMap[mapCheckX][mapCheckY] != null) {
 						p.write(l.itemMap[mapCheckX][mapCheckY].getID(),i ,j ,l.itemMap[mapCheckX][mapCheckY].getColor());
 					}
+					
 					//check for enemies on the map and add them at subsequent locations(put in another function?)
 					if(l.enemyMap[mapCheckX][mapCheckY] != null) {
 						p.write(l.enemyMap[mapCheckX][mapCheckY].getID(),i ,j ,l.enemyMap[mapCheckX][mapCheckY].getColor());
@@ -87,7 +88,10 @@ public class Camera{
 			}
 		}
 		
-		p.write(player.getID(), topLeftX + (width / 2),topLeftY + (height / 2));
+		//bottom deprecated due to can just figure out the coords of player
+		//p.write(player.getID(), topLeftX + (width / 2),topLeftY + (height / 2));
+		if(player.x > startx && player.y > starty && player.x < startx+width && player.y < starty + height)
+			p.write(player.getID(), topLeftX + player.getx() - startx, topLeftY + player.gety() - starty);
 		player.world.app.repaint();
 	}
 	

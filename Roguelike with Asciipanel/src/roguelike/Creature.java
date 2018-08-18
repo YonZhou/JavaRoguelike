@@ -6,6 +6,7 @@ import asciiPanel.AsciiPanel;
 
 public class Creature extends Entity{
 	public int health;
+	public int maxHealth;
 	public int level;
 	public String name;
 	public char icon;
@@ -20,6 +21,7 @@ public class Creature extends Entity{
 		super(icon, x, y, c);
 		this.name = string;
 		this.health = health;
+		this.maxHealth = health;
 		this.level = level;
 		this.icon = icon;
 		this.c = c;
@@ -187,6 +189,11 @@ public class Creature extends Entity{
 				moveCreature(-1, 0);
 			}
 		  }
+	}
+	
+	public void healHealth(int heal) {
+		this.health += heal;
+		if(this.health > this.maxHealth) this.health = this.maxHealth;
 	}
 
 	

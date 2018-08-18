@@ -14,7 +14,7 @@ public abstract class MenuScreen {
 	
 	public void clearColors() {
 		for(int i=0; i<textList.size(); i++) {
-			textList.get(textIndex).setColor(Color.GRAY);
+			textList.get(i).setColor(Color.GRAY);
 		}
 	}
 	

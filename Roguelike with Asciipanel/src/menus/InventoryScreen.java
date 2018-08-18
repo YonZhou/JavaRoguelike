@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import asciiPanel.AsciiPanel;
 import items.*;
 import roguelike.PanelText;
+import roguelike.Player;
 import roguelike.World;
 
 public class InventoryScreen extends MenuScreen{
@@ -78,6 +79,8 @@ public class InventoryScreen extends MenuScreen{
 			Item item = itemList.get(i);
 			if(item instanceof Weapon)
 				super.textList.add(new PanelText(item.getName() + " + " + item.level, Color.RED));
+			if(item instanceof HealthPotion)
+				super.textList.add(new PanelText(item.getName() + " + " + item.level, Color.GREEN));
 		}
 	}
 	
@@ -88,11 +91,13 @@ public class InventoryScreen extends MenuScreen{
 	@Override
 	public int checkOption() {
 		if(itemList.get(textIndex) != null) {
+			Item item = itemList.get(textIndex);
 			
-			if(itemList.get(textIndex) instanceof Weapon) {
-				w.p.equippedWeapon = (Weapon) itemList.get(textIndex);
-				w.gui.addToActionPanel(new PanelText("You equipped the "+ textList.get(textIndex).text, Color.ORANGE));
-			
+			if(item instanceof Weapon) {
+				w.p.equippedWeapon = (Weapon) item;
+				w.gui.addToActionPanel(new PanelText("You equipped the "+ textList.get(textIndex).text, Color.PINK));
+			} else if (item instanceof HealthPotion) {
+				w.p.use(item);
 			}
 			
 		}
@@ -106,15 +111,58 @@ public class InventoryScreen extends MenuScreen{
 	public void clearColors() {
 		for(int i=0; i<textList.size(); i++) {
 			if(itemList.get(i) instanceof Weapon)
-				textList.get(textIndex).setColor(Color.RED);
+				textList.get(i).setColor(Color.RED);
+			else if(itemList.get(i) instanceof HealthPotion)
+				textList.get(i).setColor(Color.GREEN);
 		}
 	}
 	
+	
+	public void dropItem() {
+		
+		if(textList.size() > 0) {
+			w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
+			w.gui.refresh();
+			
+			if(itemList.get(textIndex) == w.p.equippedWeapon)
+				w.p.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);;
+			
+			textList.remove(textIndex);
+			itemList.remove(textIndex);
+			
+			if(textIndex >= itemList.size()) {
+				textIndex = itemList.size() - 1;
+			}
+			
+			//need to check again after removing the item
+			if(textList.size() > 0)
+				textList.get(textIndex).setColor(Color.WHITE);
+			
+		}
+		displayScreen();
+	
+	}
+	
+	public void useItem() {
+		w.gui.addToActionPanel(new PanelText("You used the " + textList.get(textIndex).text, Color.PINK));
+		
+		textList.remove(textIndex);
+		itemList.remove(textIndex);
+		
+		if(textIndex >= itemList.size()) {
+			textIndex = itemList.size() - 1;
+		}
+		
+		if(textList.size() > 0)
+			textList.get(textIndex).setColor(Color.WHITE);
+		displayScreen();
+		
+	}
 	public void openInvScreen() {
 		clearTextList();
 		updateTextList();
 		textIndex = 0;
-		if(textList.get(0) != null)
+		if(textList.size() > 0 && textList.get(0) != null)
 			textList.get(0).setColor(Color.WHITE);
 		displayScreen();
 	}

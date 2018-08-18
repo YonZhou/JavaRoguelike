@@ -28,6 +28,8 @@ public class KeyHandler2 {
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "EnterKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "SpaceKey");
 		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("I"), "IKey");
+		a.getTerminal().getInputMap().put(KeyStroke.getKeyStroke("E"), "EKey");
+		
 		
 		//everything above this line should stay in setup
 		
@@ -62,6 +64,7 @@ public class KeyHandler2 {
 		clearMovementKeys();
 		a.getTerminal().getActionMap().put("IKey", null);
 		a.getTerminal().getActionMap().put("SpaceKey", null);
+		a.getTerminal().getActionMap().put("EKey", null);
 	}
 	
 	public void rebindStartMenuMovement() {
@@ -82,6 +85,7 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
 		a.getTerminal().getActionMap().put("SpaceKey", new PlayerPickupAction());
 		a.getTerminal().getActionMap().put("IKey", new OpenInventoryAction());
+		a.getTerminal().getActionMap().put("EKey", new ShootModeAction());
 	}
 	
 	public void switchInventoryKeys() {
@@ -91,6 +95,13 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.invScreen));
 		a.getTerminal().getActionMap().put("EnterKey", new InventorySelect());
 		a.getTerminal().getActionMap().put("SpaceKey", new InventorySelect());
+		a.getTerminal().getActionMap().put("EKey", new dropItemAction());
+	}
+	
+	public void switchShootKeys() {
+		clearPlayerKeys();
+		a.getTerminal().getActionMap().put("rightKey", new ShootSelect(0));
+		a.getTerminal().getActionMap().put("leftKey", new ShootSelect(1));
 	}
 	
 	class OpenInventoryAction extends AbstractAction{
@@ -104,16 +115,17 @@ public class KeyHandler2 {
 	}
 	
 	
-	//TODO
 	class CloseInventoryAction extends AbstractAction{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//erase the inventory layer
+			
+			//erase the inventory layer, may need to add more to this as more guis emerge
 			a.world.gui.refresh();
-			p.camera.renderCamera();
+			p.camera.renderCamera(p);
 			
 			a.getTerminal().getActionMap().put("EnterKey", null);
+			a.getTerminal().getActionMap().put("EKey", null);
 			rebindPlayerMovement();
 			
 		}
@@ -146,7 +158,8 @@ public class KeyHandler2 {
 			p.moveCreature(x, y);
 			
 			
-			p.camera.renderCamera();
+			//p.camera.renderCamera(p);
+			p.camera.renderCamera(p.l.enemyList.get(0));
 			
 			//this should come last, or else the death screen will be rendered first and overwritten by p.camera.render
 			p.checkDeath();
@@ -155,6 +168,16 @@ public class KeyHandler2 {
 	        System.out.println("Player y " + p.y);
 		}
 
+		
+	}
+	
+	class dropItemAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			p.world.invScreen.dropItem();
+			
+		}
 		
 	}
 	
@@ -230,7 +253,35 @@ public class KeyHandler2 {
 		}
 		
 	}
+	
+	class ShootModeAction extends AbstractAction{
 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			switchShootKeys();
+			p.setupShoot();
+		}
+		
+	}
+	
+	class ShootSelect extends AbstractAction{
+		public int direction;
+		
+		public ShootSelect(int i) {
+			direction = i;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(direction == 0) {
+				p.switchFocusLeft();
+			} else {
+				p.switchFocusRight();
+			}
+			
+		}
+		
+	}
 
 
 

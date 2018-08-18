@@ -80,7 +80,7 @@ public class World {
 		
 		Level nextL = nextLevel(); 
 		p.setLevel(nextL);
-		p.camera.renderCamera();
+		p.camera.renderCamera(p);
 
 	}
 	
