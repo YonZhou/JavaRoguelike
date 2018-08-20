@@ -29,7 +29,7 @@ public class GameOverScreen extends MenuScreen{
 		world.p.resetStats();
 		world.reset();
 		//world.app.g.refresh(); //WHY DO INEED TO ADD THIS LINE? fixed, watch out a=panel, app=appmain
-		world.p.camera.renderCamera();
+		world.p.camera.renderCamera(world.p);
 		world.gui.refresh();
 		world.app.repaint();
 	}

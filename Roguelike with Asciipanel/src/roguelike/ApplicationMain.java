@@ -34,11 +34,11 @@ public class ApplicationMain extends JFrame{
 	    //only needs to be called once
 	    Camera camera = new Camera(Player, Player.x, Player.y, Player.l, getTerminal());
 	    Player.setCamera(camera);
-	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT, 0, 10);
+	    Player.camera.setDimensions(TERMINAL_WIDTH, TERMINAL_HEIGHT-10, 0, 10);
 	    this.world = new World(Player, this);
 	    Player.setWorld(world);
 	    
-	    world.setBoundDimensions(1000, 1000, 100, 100);
+	    world.setBoundDimensions(200, 200, 100, 100);
 	    
 //	    world.createRWalkLevel(); //after menu screen
 //	    world.setCurrentLevel(world.levelList.get(0)); //after menu screen

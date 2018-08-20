@@ -1,6 +1,8 @@
 package roguelike;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
 
 import asciiPanel.AsciiPanel;
 
@@ -21,8 +23,6 @@ public class Camera{
 		this.y = y;
 		this.l = l;
 		this.p = p;
-		this.topLeftX = 0;
-		this.topLeftY = 3;
 	}
 	
 	public void setDimensions(int w, int h, int xoff, int yoff) {
@@ -56,8 +56,8 @@ public class Camera{
 		//loop through the TERMINAL coordinates, map coordinates must add startx and starty
 		//i and j must start at 0; they represent the loop and represent SCREEN coords
 		//to convert i and j to coordinates on the map, add the x/y coordinate of top-left and then subtract the "starting" offset
-		for(int i = topLeftX; i < this.width; i++) {
-			for(int j = topLeftY; j < this.height; j++) {
+		for(int i = topLeftX; i < topLeftX + this.width; i++) {
+			for(int j = topLeftY; j < topLeftY + this.height; j++) {
 				//NEED TO CREATE CHECK THAT CAN WRITE ON ASCIIPANEL(or maybe not?)
 				
 				int mapCheckX = i + startx - topLeftX;
@@ -90,9 +90,34 @@ public class Camera{
 		
 		//bottom deprecated due to can just figure out the coords of player
 		//p.write(player.getID(), topLeftX + (width / 2),topLeftY + (height / 2));
-		if(player.x > startx && player.y > starty && player.x < startx+width && player.y < starty + height)
+		
+		if(player.getx() - startx + topLeftX >= 0 && player.gety() - starty + topLeftY >= 0 && player.getx() - startx < this.width && player.gety() - starty< this.height)
 			p.write(player.getID(), topLeftX + player.getx() - startx, topLeftY + player.gety() - starty);
 		player.world.app.repaint();
+	}
+	
+	public void drawLineToEntity(Entity e) {
+		ArrayList<Point> pointList = player.world.makeLine(player.getx(), player.gety(), e.getx(), e.gety());
+		int startx = this.x - (this.width / 2);
+		int starty = this.y - (this.height / 2);
+		
+		
+		for(Point point : pointList) {
+			if(point.x - startx + topLeftX >= 0 && point.y - starty + topLeftY >= 0 && point.x - startx < this.width && point.y - starty< this.height) {
+				p.write(',', point.x - startx + topLeftX, point.y - starty + topLeftY, Color.GREEN);
+			
+//				if(player.world.currentlevel.enemyMap[point.x][point.y] != null) {
+//					p.write(',', point.x - startx + topLeftX, point.y - starty + topLeftY, Color.GREEN);
+//				}
+				
+				if(player.getx() - startx + topLeftX >= 0 && player.gety() - starty + topLeftY >= 0 && player.getx() - startx < this.width && player.gety() - starty< this.height)
+					p.write(player.getID(), topLeftX + player.getx() - startx, topLeftY + player.gety() - starty);
+				
+				p.write(e.getID(), e.getx() - startx + topLeftX, e.gety() - starty + topLeftY, Color.RED, Color.WHITE);
+			}
+		}
+		
+		
 	}
 	
 	

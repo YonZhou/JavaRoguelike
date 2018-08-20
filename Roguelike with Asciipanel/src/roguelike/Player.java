@@ -31,7 +31,9 @@ public class Player extends Creature{
 		this.ai = new PathFindingAI(this);
 		this.enemiesInRange = new ArrayList<Entity>();
 		
-		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+		//this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 10 );
+		
 		this.inv = new Inventory();
 		
 		this.inv.itemList.add(equippedWeapon);
@@ -217,40 +219,58 @@ public class Player extends Creature{
 	}
 	
 	public void updateEnemiesInRange() {
-		int range = ((Gun) (equippedWeapon)).getRange();
+		if(equippedWeapon instanceof Gun) {
 		
-		int topLeftX = this.x - range;
-		int topLeftY = this.y - range;
-		
-		
-		//should check if something is blocking them
-		
-		for(int i= topLeftX; i< range*2; i++) {
-			for(int j = topLeftY; j< range*2; j++) {
-				if(l.enemyMap[i][j] != null ) {
-					enemiesInRange.add(l.enemyMap[i][j]);
+			int range = ((Gun) (equippedWeapon)).getRange();
+			
+			int topLeftX = this.x - range;
+			int topLeftY = this.y - range;
+			
+			
+			//should check if something is blocking them
+			
+			for(int i= topLeftX; i< topLeftX + range*2; i++) {
+				for(int j = topLeftY; j< topLeftY + range*2; j++) {
+					if(i > 0 && i < l.Map.length && j > 0 && j < l.Map[0].length && l.enemyMap[i][j] != null ) {
+						if(!world.checkCanSee(this.x, this.y, i,j))
+							enemiesInRange.add(l.enemyMap[i][j]);
+					}
 				}
 			}
+
 		}
 	}
 	
 	public void switchFocusLeft() {
-		this.index--;
-		camera.setCoordinates((Creature) enemiesInRange.get(index));
+		if(enemiesInRange.size() > 0) {
+			this.index--;
+			if(this.index < 0) {
+				this.index = this.enemiesInRange.size() - 1;
+			}
+			camera.renderCamera((Creature) enemiesInRange.get(index));
+			camera.drawLineToEntity(enemiesInRange.get(index));
+		}
 	}
 	
 	public void switchFocusRight() {
-		this.index++;
-		camera.setCoordinates((Creature) enemiesInRange.get(index));
+		if(enemiesInRange.size() > 0) {
+			this.index++;
+			if(this.index >= this.enemiesInRange.size()) {
+				this.index = 0;
+			}
+			camera.renderCamera((Creature) enemiesInRange.get(index));
+			camera.drawLineToEntity(enemiesInRange.get(index));
+		} 
 	}
 	
 	public void setupShoot() {
-		this.enemiesInRange = new ArrayList<Entity>();
 		updateEnemiesInRange();
 		this.index = 0;
 		
 		if(enemiesInRange.size() > 0) {
 			Entity focusedEnemy = enemiesInRange.get(index);
+			camera.renderCamera((Creature) focusedEnemy);
+			camera.drawLineToEntity(focusedEnemy);
 		}
 	}
 	
@@ -258,6 +278,12 @@ public class Player extends Creature{
 		
 
 	}
+	
+	public void exitShooting() {
+		this.enemiesInRange.clear();
+		this.index = 0;
+	}
+	
 	
 
 }

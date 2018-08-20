@@ -1,5 +1,6 @@
 package roguelike;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,6 +9,7 @@ import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
+import items.Gun;
 import menus.MenuScreen;
 
 public class KeyHandler2 {
@@ -102,6 +104,8 @@ public class KeyHandler2 {
 		clearPlayerKeys();
 		a.getTerminal().getActionMap().put("rightKey", new ShootSelect(0));
 		a.getTerminal().getActionMap().put("leftKey", new ShootSelect(1));
+		a.getTerminal().getActionMap().put("EKey", new CloseShootModeAction());
+		//a.getTerminal().getActionMap().put("EnterKey", new ShootSelect());
 	}
 	
 	class OpenInventoryAction extends AbstractAction{
@@ -125,7 +129,6 @@ public class KeyHandler2 {
 			p.camera.renderCamera(p);
 			
 			a.getTerminal().getActionMap().put("EnterKey", null);
-			a.getTerminal().getActionMap().put("EKey", null);
 			rebindPlayerMovement();
 			
 		}
@@ -158,8 +161,8 @@ public class KeyHandler2 {
 			p.moveCreature(x, y);
 			
 			
-			//p.camera.renderCamera(p);
-			p.camera.renderCamera(p.l.enemyList.get(0));
+			p.camera.renderCamera(p);
+			//p.camera.renderCamera(p.l.enemyList.get(0));
 			
 			//this should come last, or else the death screen will be rendered first and overwritten by p.camera.render
 			p.checkDeath();
@@ -258,8 +261,21 @@ public class KeyHandler2 {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchShootKeys();
-			p.setupShoot();
+			if(p.equippedWeapon instanceof Gun) {
+				p.setupShoot();
+				if(p.enemiesInRange.size() > 0) {
+					switchShootKeys();
+				} else {
+					p.world.gui.addToActionPanel(new PanelText("No enemies in range"));
+					p.world.gui.refresh();
+					a.repaint();
+				}
+				
+			} else {
+				p.world.gui.addToActionPanel(new PanelText("No gun equipped!", Color.RED));
+				p.world.gui.refresh();
+				a.repaint();
+			}
 		}
 		
 	}
@@ -281,6 +297,20 @@ public class KeyHandler2 {
 			
 		}
 		
+	}
+	
+	class CloseShootModeAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			p.exitShooting();
+			p.camera.renderCamera(p);
+			
+			rebindPlayerMovement();
+			a.getTerminal().getActionMap().put("EnterKey", null);
+			
+		}
+	
 	}
 
 

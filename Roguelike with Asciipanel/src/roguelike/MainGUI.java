@@ -71,6 +71,7 @@ public class MainGUI extends AsciiPanel{
 	}
 	
 	
+	//should include repaint?
 	
 	public void refresh() {
 		panel.clear(' ', 0, 0, width, height);
