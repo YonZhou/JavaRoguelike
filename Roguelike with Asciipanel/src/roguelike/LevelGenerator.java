@@ -315,7 +315,12 @@ public class LevelGenerator {
 			} else if(randomPlaceHolder < 31) {
 				int gunLevel = r.nextInt(5) + 1;
 				Gun gun = new Gun("Gun", x, y, gunLevel);
-				gun.setAmmoType(gunLevel);
+				
+				if(gunLevel > 3)
+					gun.setAmmoType(3);
+				else {
+					gun.setAmmoType(gunLevel);
+				}
 				
 				level.itemList.add(gun);
 				level.itemMap[x][y] = gun;

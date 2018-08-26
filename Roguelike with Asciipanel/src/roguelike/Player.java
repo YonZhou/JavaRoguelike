@@ -15,6 +15,7 @@ import items.Weapon;
 public class Player extends Creature{
 
 	private Creature engagedCreature;
+	private Creature focusedCreatureInRange;
 	public static final int BASE_HEALTH = 10000;
 	public int aggroWidth;
 	public int aggroHeight;
@@ -73,6 +74,7 @@ public class Player extends Creature{
 		this.camera.setLevel(l);
 		addAtEmptyLocation();
 	}
+	
 	@Override
 	public void moveCreature(int dx, int dy) {
 		
@@ -282,6 +284,7 @@ public class Player extends Creature{
 			if(this.index >= this.enemiesInRange.size()) {
 				this.index = 0;
 			}
+			
 			camera.renderCamera((Creature) enemiesInRange.get(index));
 			camera.drawLineToEntity(enemiesInRange.get(index));
 		} else {
@@ -307,37 +310,59 @@ public class Player extends Creature{
 		world.gui.refresh();
 	}
 	
-	public void shoot(Creature c) {
-		Gun gun = (Gun) this.equippedWeapon;
-		
-		if(this.inv.containsID(gun.ammoType) > 0) {
-			int i;
-			i = this.inv.containsID(gun.ammoType);
-			if(!((Ammo)this.inv.itemList.get(i)).isEmpty())
-				((Ammo) this.inv.itemList.get(i)).decrementCapacity(1);
-			c.takeDamage(gun.getAttack());
-			world.gui.addToActionPanel(new PanelText("You shoot the " + c.name +" for " + gun.getAttack()));
-			if(c.checkPlayerKill())
-				enemiesInRange.remove(index);
-		} else {
-			world.gui.addToActionPanel(new PanelText("No ammo"));
-		}
-		
-		//Creature focusedEnemy = (Creature) enemiesInRange.get(index);
-
-	}
+//	public void shoot(Creature c) {
+//		Gun gun = (Gun) this.equippedWeapon;
+//		
+//		if(this.inv.containsID(gun.ammoType) > 0) {
+//			int i;
+//			i = this.inv.containsID(gun.ammoType);
+//			if(!((Ammo)this.inv.itemList.get(i)).isEmpty())
+//				((Ammo) this.inv.itemList.get(i)).decrementCapacity(1);
+//			c.takeDamage(gun.getAttack());
+//			world.gui.addToActionPanel(new PanelText("You shoot the " + c.name +" for " + gun.getAttack()));
+//			if(c.checkPlayerKill())
+//				enemiesInRange.remove(index);
+//		} else {
+//			world.gui.addToActionPanel(new PanelText("No ammo"));
+//		}
+//		
+//		//Creature focusedEnemy = (Creature) enemiesInRange.get(index);
+//
+//	}
 	
 	public void shoot() {
+		
+		l.moveAllCreatures();
+		
+		updateEnemiesInRange();
+		
 		Gun gun = (Gun) this.equippedWeapon;
+		
+		
+		if(!inShootingMode()) {
+			exitShooting();
+			return;
+		}
+		
+		if(this.index >= this.enemiesInRange.size()) {
+			this.index = 0;
+		}
+		
 		Creature focusedEnemy = (Creature) enemiesInRange.get(index);
 		
-		System.out.println("The gun's ammo type is " + gun.ammoType);
+		if(focusedCreatureInRange != null && enemiesInRange.contains(focusedCreatureInRange)) {
+			focusedEnemy = focusedCreatureInRange;
+		}
+		
+		
+		
+		this.camera.renderCamera(focusedEnemy);
+		this.camera.drawLineToEntity(focusedEnemy);
 		
 		if(this.inv.containsID(gun.ammoType) > 0) {
+
 			
 			int i = this.inv.containsID(gun.ammoType);
-			
-			
 			
 			if(!((Ammo)this.inv.itemList.get(i)).isEmpty()) {
 				((Ammo) this.inv.itemList.get(i)).decrementCapacity(1);
@@ -349,23 +374,26 @@ public class Player extends Creature{
 			}
 			if(focusedEnemy.checkPlayerKill()) {
 				this.enemiesInRange.remove(index);
-				
 				updateEnemiesInRange();
-				
 				switchFocusRight();
 			}
 		} else {
 			world.gui.addToActionPanel(new PanelText("No ammo!"));
 		}
 		
+		//ai.updateMap();
+		
+		this.focusedCreatureInRange = focusedEnemy;
+		
+		
 		world.gui.refresh();
 		world.app.repaint();
-
 	}
 	
 	
 	public void exitShooting() {
 		this.enemiesInRange.clear();
+		focusedCreatureInRange = null;
 		this.index = 0;
 		camera.renderCamera(this);
 	}
