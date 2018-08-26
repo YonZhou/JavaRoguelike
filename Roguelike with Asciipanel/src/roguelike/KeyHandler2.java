@@ -86,18 +86,33 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("rightKey", new PlayerMovementAction(1, 0));
 		a.getTerminal().getActionMap().put("leftKey", new PlayerMovementAction(-1, 0));
 		a.getTerminal().getActionMap().put("SpaceKey", new PlayerPickupAction());
-		a.getTerminal().getActionMap().put("IKey", new OpenInventoryAction());
+		a.getTerminal().getActionMap().put("IKey", new OpenInventoryAction(0));
 		a.getTerminal().getActionMap().put("EKey", new ShootModeAction());
 	}
 	
 	public void switchInventoryKeys() {
 		clearPlayerKeys();
-		a.getTerminal().getActionMap().put("IKey", new CloseInventoryAction());
+		a.getTerminal().getActionMap().put("IKey", new CloseInventoryAction(0));
 		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.invScreen));
 		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.invScreen));
-		a.getTerminal().getActionMap().put("EnterKey", new InventorySelect());
-		a.getTerminal().getActionMap().put("SpaceKey", new InventorySelect());
-		a.getTerminal().getActionMap().put("EKey", new dropItemAction());
+		a.getTerminal().getActionMap().put("EnterKey", new InventorySelect(0));
+		a.getTerminal().getActionMap().put("SpaceKey", new InventorySelect(0));
+		a.getTerminal().getActionMap().put("EKey", new dropItemAction(0));
+	}
+	
+	public void switchInventoryKeysShooting() {
+		clearPlayerKeys();
+		a.getTerminal().getActionMap().put("IKey", new CloseInventoryAction(1));
+		a.getTerminal().getActionMap().put("downKey", new ScreenSelectDown(p.world.invScreen));
+		a.getTerminal().getActionMap().put("upKey", new ScreenSelectUp(p.world.invScreen));
+		a.getTerminal().getActionMap().put("EnterKey", new InventorySelect(1));
+		a.getTerminal().getActionMap().put("SpaceKey", new InventorySelect(1));
+		a.getTerminal().getActionMap().put("EKey", new dropItemAction(1));
+	}
+	
+	
+	public void clearShootKeys() {
+		a.getTerminal().getActionMap().put("EnterKey", null);
 	}
 	
 	public void switchShootKeys() {
@@ -105,14 +120,25 @@ public class KeyHandler2 {
 		a.getTerminal().getActionMap().put("rightKey", new ShootSelect(0));
 		a.getTerminal().getActionMap().put("leftKey", new ShootSelect(1));
 		a.getTerminal().getActionMap().put("EKey", new CloseShootModeAction());
-		//a.getTerminal().getActionMap().put("EnterKey", new ShootSelect());
+		a.getTerminal().getActionMap().put("EnterKey", new ShootAction());
+		a.getTerminal().getActionMap().put("IKey", new OpenInventoryAction(1));
 	}
 	
 	class OpenInventoryAction extends AbstractAction{
+		public int mode;
+		
+		
+		public OpenInventoryAction(int i) {
+			this.mode = i;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			switchInventoryKeys();
+			if(mode == 0)
+				switchInventoryKeys();
+			else if(mode == 1) {
+				switchInventoryKeysShooting();
+			}
 			p.world.invScreen.openInvScreen();
 		}
 		
@@ -120,16 +146,30 @@ public class KeyHandler2 {
 	
 	
 	class CloseInventoryAction extends AbstractAction{
+		int mode;
+		
+		public CloseInventoryAction(int i) {
+			this.mode = i;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
 			//erase the inventory layer, may need to add more to this as more guis emerge
 			a.world.gui.refresh();
-			p.camera.renderCamera(p);
 			
-			a.getTerminal().getActionMap().put("EnterKey", null);
-			rebindPlayerMovement();
+			if(mode == 0) {
+				p.camera.renderCamera(p);
+				rebindPlayerMovement();
+				a.getTerminal().getActionMap().put("EnterKey", null);
+			} else if(mode == 1) {
+				
+				//add check for if gun is unequipped
+				p.camera.renderCamera((Creature) p.enemiesInRange.get(p.index));
+				p.camera.drawLineToEntity((Creature) p.enemiesInRange.get(p.index));
+				
+				switchShootKeys();
+			}
 			
 		}
 		
@@ -175,6 +215,10 @@ public class KeyHandler2 {
 	}
 	
 	class dropItemAction extends AbstractAction{
+		public int mode;
+		public dropItemAction(int i) {
+			this.mode = i;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -248,11 +292,23 @@ public class KeyHandler2 {
 	}
 	
 	class InventorySelect extends AbstractAction{
+		public int mode;
+		public InventorySelect(int i) {
+			this.mode = i;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int actionChecked = p.world.invScreen.checkOption();
 			
+		}
+		
+	}
+	class ShootAction extends AbstractAction{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			p.shoot();
 		}
 		
 	}
@@ -304,7 +360,6 @@ public class KeyHandler2 {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			p.exitShooting();
-			p.camera.renderCamera(p);
 			
 			rebindPlayerMovement();
 			a.getTerminal().getActionMap().put("EnterKey", null);

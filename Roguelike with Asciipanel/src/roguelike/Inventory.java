@@ -11,13 +11,31 @@ public class Inventory {
 	public int maxInvSize;
 	
 	
-	public Inventory() {
+	public Inventory(int i) {
 		this.itemList = new ArrayList<Item>();
-		this.maxInvSize = 3;
+		this.maxInvSize = i;
 	}
 	
 	public void clear() {
 		this.itemList.clear();
+	}
+	
+//	public boolean containsClass(Class c) {
+//		for(int i=0; i<itemList.size(); i++) {
+//			if(itemList.get(i) instanceof c.class) {
+//				
+//			}
+//		}
+//	}
+	
+	public int containsID(int i) {
+		for(int j=0; j < itemList.size(); j++) {
+			if(i == itemList.get(j).getItemID()) {
+				return j;
+			}
+		}
+		
+		return -1;
 	}
 	
 

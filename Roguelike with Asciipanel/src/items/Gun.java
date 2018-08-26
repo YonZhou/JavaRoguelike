@@ -6,7 +6,16 @@ public class Gun extends Weapon{
 	
 	private int range;
 	public int ammoUsage;
+	public int ammoType;
 
+	public Gun(String name, int x, int y, int level, int ammoType) {
+		super(name, '/', x, y, Color.YELLOW);
+		super.level = level;
+		super.setAttack(10*level);
+		this.range = level*level + 50;
+		this.ammoType = ammoType;
+	}
+	
 	public Gun(String name, int x, int y, int level) {
 		super(name, '/', x, y, Color.YELLOW);
 		super.level = level;
@@ -17,6 +26,11 @@ public class Gun extends Weapon{
 	public int getRange() {
 		return this.range;
 	}
+	
+	public void setAmmoType(int i) {
+		this.ammoType = i;
+	}
+	
 	
 	
 

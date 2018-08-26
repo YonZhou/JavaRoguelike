@@ -43,6 +43,10 @@ public class Camera{
 		this.y = c.gety();
 	}
 	
+	public void renderCameraOnPlayer() {
+		renderCamera(player);
+	}
+	
 	
 	public void renderCamera(Creature c) {
 		setCoordinates(c);

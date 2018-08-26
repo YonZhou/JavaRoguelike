@@ -81,6 +81,10 @@ public class InventoryScreen extends MenuScreen{
 				super.textList.add(new PanelText(item.getName() + " + " + item.level, Color.RED));
 			if(item instanceof HealthPotion)
 				super.textList.add(new PanelText(item.getName() + " + " + item.level, Color.GREEN));
+			if(item instanceof Stackable) {
+				super.textList.add(new PanelText(item.getName() + " x" + ((Stackable)item).getCapacity(), Color.YELLOW));
+
+			}
 		}
 	}
 	
@@ -94,8 +98,12 @@ public class InventoryScreen extends MenuScreen{
 			Item item = itemList.get(textIndex);
 			
 			if(item instanceof Weapon) {
-				w.p.equippedWeapon = (Weapon) item;
-				w.gui.addToActionPanel(new PanelText("You equipped the "+ textList.get(textIndex).text, Color.PINK));
+				if(w.p.inShootingMode()) {
+					w.gui.addToActionPanel(new PanelText("Cannot switch weapons while in shooting mode!"));
+				} else {
+					w.p.equippedWeapon = (Weapon) item;
+					w.gui.addToActionPanel(new PanelText("You equipped the "+ textList.get(textIndex).text, Color.PINK));
+				}
 			} else if (item instanceof HealthPotion) {
 				w.p.use(item);
 			}
@@ -114,6 +122,8 @@ public class InventoryScreen extends MenuScreen{
 				textList.get(i).setColor(Color.RED);
 			else if(itemList.get(i) instanceof HealthPotion)
 				textList.get(i).setColor(Color.GREEN);
+			else if(itemList.get(i) instanceof Stackable)
+				textList.get(i).setColor(Color.YELLOW);
 		}
 	}
 	
@@ -121,14 +131,25 @@ public class InventoryScreen extends MenuScreen{
 	public void dropItem() {
 		
 		if(textList.size() > 0) {
-			w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
-			w.gui.refresh();
 			
-			if(itemList.get(textIndex) == w.p.equippedWeapon)
-				w.p.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);;
+			if(itemList.get(textIndex) == w.p.equippedWeapon) {
+				if(w.p.inShootingMode()) {
+					w.gui.addToActionPanel(new PanelText("Can't unequip gun while in shooting mode!"));
+				} else {
+					w.p.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+					w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
+					textList.remove(textIndex);
+					itemList.remove(textIndex);
+				}
+			} else {
+				w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
+				textList.remove(textIndex);
+				itemList.remove(textIndex);
+			}
 			
-			textList.remove(textIndex);
-			itemList.remove(textIndex);
+			
+			
+			
 			
 			if(textIndex >= itemList.size()) {
 				textIndex = itemList.size() - 1;
@@ -139,6 +160,7 @@ public class InventoryScreen extends MenuScreen{
 				textList.get(textIndex).setColor(Color.WHITE);
 			
 		}
+		w.gui.refresh();
 		displayScreen();
 	
 	}

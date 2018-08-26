@@ -166,6 +166,10 @@ public class World {
 		
 	}
 	
+	public void createAmmoTypes() {
+		
+	}
+	
 //	public void playerDeath() {
 //		boolean newGame = false;
 //		

@@ -10,6 +10,8 @@ import Tiles.Tiles;
 import Tiles.WalkableTile;
 import Tiles.WallTile;
 import asciiPanel.AsciiPanel;
+import items.Ammo;
+import items.Gun;
 import items.HealthPotion;
 import items.Item;
 import items.Sword;
@@ -291,7 +293,9 @@ public class LevelGenerator {
 			int x = wTile.getx();
 			int y = wTile.gety();
 			
-			if(r.nextInt(5) > 0) {
+			int randomPlaceHolder = r.nextInt(100) + 1;
+			
+			if(randomPlaceHolder < 0) {
 			
 				int swordLevel = r.nextInt(5) + 1;
 				
@@ -300,13 +304,30 @@ public class LevelGenerator {
 				level.itemList.add(sword);
 				level.itemMap[x][y] = sword;
 				
-			} else {
+			} else if (randomPlaceHolder < 11){
 				int potionLevel = r.nextInt(5) + 1;
 				
 				HealthPotion potion = new HealthPotion(x, y, potionLevel);
 				
 				level.itemList.add(potion);
 				level.itemMap[x][y] = potion;
+				
+			} else if(randomPlaceHolder < 31) {
+				int gunLevel = r.nextInt(5) + 1;
+				Gun gun = new Gun("Gun", x, y, gunLevel);
+				gun.setAmmoType(gunLevel);
+				
+				level.itemList.add(gun);
+				level.itemMap[x][y] = gun;
+			} else {
+				int ammoType = r.nextInt(3) + 1;
+				
+				int capacity = r.nextInt(50) + 1;
+				
+				Ammo ammo = new Ammo("Ammo" + " type " + ammoType, x,y, capacity, ammoType);
+				
+				level.itemList.add(ammo);
+				level.itemMap[x][y] = ammo;
 			}
 			
 			level.FreeTileList.remove(randomIndex);

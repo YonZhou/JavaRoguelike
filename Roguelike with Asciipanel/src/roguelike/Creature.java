@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import asciiPanel.AsciiPanel;
+import items.Item;
 
 public class Creature extends Entity{
 	public int health;
@@ -41,6 +42,10 @@ public class Creature extends Entity{
 	public void setLevel(Level l) {
 		this.l = l;
 	}
+	
+	public void takeDamage(int i) {
+		this.health -= i;
+	}
 
 	
 	public void setHealth(int health) {
@@ -58,6 +63,15 @@ public class Creature extends Entity{
 			this.x += dx;
 			this.y += dy;
 		}
+	}
+	
+	public boolean checkPlayerKill() {
+		if(this.health <= 0) {
+			this.die();
+			this.l.player.world.gui.addToActionPanel(new PanelText("You kill the " + this.name, Color.RED));
+			return true;
+		}
+		return false;
 	}
 
 //	public void drawCreature() {
@@ -95,7 +109,7 @@ public class Creature extends Entity{
 	
 	public void attackPlayer() {
 		int damage = 10;
-		this.l.player.health -= damage;
+		this.l.player.takeDamage(damage);
 		
 		l.player.world.gui.addToActionPanel(new PanelText(this.name + " hits you for " + damage));
 		
@@ -128,6 +142,8 @@ public class Creature extends Entity{
 	//add death function, where remove from enemy list, and then have the update creaturemap function first clear map based on list, then rewrite
 	public void die() {
 		this.l.enemyList.remove(this);
+		l.enemyMap[this.getx()][this.gety()] = null;
+
 	}
 	
 	public void moveRandom() {
@@ -194,6 +210,11 @@ public class Creature extends Entity{
 	public void healHealth(int heal) {
 		this.health += heal;
 		if(this.health > this.maxHealth) this.health = this.maxHealth;
+	}
+	
+	public Item drop() {
+		return null;
+		
 	}
 
 	

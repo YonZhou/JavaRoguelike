@@ -4,16 +4,18 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+import items.Ammo;
 import items.Gun;
 import items.HealthPotion;
 import items.Item;
+import items.Stackable;
 import items.Weapon;
 
 
 public class Player extends Creature{
 
 	private Creature engagedCreature;
-	public static final int BASE_HEALTH = 100;
+	public static final int BASE_HEALTH = 10000;
 	public int aggroWidth;
 	public int aggroHeight;
 	public PathFindingAI ai;
@@ -32,11 +34,14 @@ public class Player extends Creature{
 		this.enemiesInRange = new ArrayList<Entity>();
 		
 		//this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
-		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 10 );
+		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 1, 1);
 		
-		this.inv = new Inventory();
+		this.inv = new Inventory(5);
 		
 		this.inv.itemList.add(equippedWeapon);
+		
+		this.inv.itemList.add(new Ammo("Standard rounds", 1, 1, 10, 1));
+		
 	}
 	
 	
@@ -146,11 +151,14 @@ public class Player extends Creature{
 		
 		this.world.gui.addToActionPanel(new PanelText("You hit "+ engagedCreature.name + " for " + damageDealt));
 		
-		other.health -= damageDealt;
-		if(other.health <= 0) {
-			other.die();
-			this.world.gui.addToActionPanel(new PanelText("You kill the " + engagedCreature.name, Color.RED));
-		}
+		other.takeDamage(damageDealt);
+		other.checkPlayerKill();
+		
+		//this function already called in checkPlayerKill
+//		if(other.health <= 0) {
+//			other.die();
+//			this.world.gui.addToActionPanel(new PanelText("You kill the " + engagedCreature.name, Color.RED));
+//		}
 	}
 	
 	public boolean checkForItem(int xC, int yC) {
@@ -165,12 +173,25 @@ public class Player extends Creature{
 			if(inv.itemList.size() < inv.maxInvSize) {
 				Item itempickedup = l.itemMap[this.x][this.y];
 				
-				this.inv.itemList.add(itempickedup);
 				
-				
-				
-				world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " + " + itempickedup.level , Color.YELLOW));
-				
+				//need to fix this
+				if(itempickedup instanceof Stackable) {
+					System.out.println("The id is: " + itempickedup.getItemID());
+					
+					
+					if(inv.containsID(itempickedup.getItemID()) > -1) {
+						int i = inv.containsID(itempickedup.getItemID());
+						((Stackable) inv.itemList.get(i)).incrementCapacity(((Stackable) itempickedup).getCapacity());
+					} else {
+						this.inv.itemList.add(itempickedup);
+					}
+			
+					world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " x" + ((Ammo) itempickedup).Capacity , Color.YELLOW));
+
+				} else {
+					this.inv.itemList.add(itempickedup);
+					world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " + " + itempickedup.level , Color.YELLOW));
+				}		
 				l.deleteItem(this.x, this.y);
 				
 				l.moveAllCreatures();
@@ -219,6 +240,8 @@ public class Player extends Creature{
 	}
 	
 	public void updateEnemiesInRange() {
+		enemiesInRange.clear();
+		
 		if(equippedWeapon instanceof Gun) {
 		
 			int range = ((Gun) (equippedWeapon)).getRange();
@@ -250,6 +273,7 @@ public class Player extends Creature{
 			camera.renderCamera((Creature) enemiesInRange.get(index));
 			camera.drawLineToEntity(enemiesInRange.get(index));
 		}
+		world.gui.refresh();
 	}
 	
 	public void switchFocusRight() {
@@ -260,7 +284,13 @@ public class Player extends Creature{
 			}
 			camera.renderCamera((Creature) enemiesInRange.get(index));
 			camera.drawLineToEntity(enemiesInRange.get(index));
-		} 
+		} else {
+			exitShooting();
+			world.app.mainKeyListener.clearShootKeys();
+			world.app.mainKeyListener.rebindPlayerMovement();
+
+		}
+		world.gui.refresh();
 	}
 	
 	public void setupShoot() {
@@ -272,16 +302,79 @@ public class Player extends Creature{
 			camera.renderCamera((Creature) focusedEnemy);
 			camera.drawLineToEntity(focusedEnemy);
 		}
+		
+		//NEED TOA DD THIS LINE EVERYTIME SO THE GUI GOES ON TOP. ANY WAY AROUND THIS???
+		world.gui.refresh();
+	}
+	
+	public void shoot(Creature c) {
+		Gun gun = (Gun) this.equippedWeapon;
+		
+		if(this.inv.containsID(gun.ammoType) > 0) {
+			int i;
+			i = this.inv.containsID(gun.ammoType);
+			if(!((Ammo)this.inv.itemList.get(i)).isEmpty())
+				((Ammo) this.inv.itemList.get(i)).decrementCapacity(1);
+			c.takeDamage(gun.getAttack());
+			world.gui.addToActionPanel(new PanelText("You shoot the " + c.name +" for " + gun.getAttack()));
+			if(c.checkPlayerKill())
+				enemiesInRange.remove(index);
+		} else {
+			world.gui.addToActionPanel(new PanelText("No ammo"));
+		}
+		
+		//Creature focusedEnemy = (Creature) enemiesInRange.get(index);
+
 	}
 	
 	public void shoot() {
+		Gun gun = (Gun) this.equippedWeapon;
+		Creature focusedEnemy = (Creature) enemiesInRange.get(index);
 		
+		System.out.println("The gun's ammo type is " + gun.ammoType);
+		
+		if(this.inv.containsID(gun.ammoType) > 0) {
+			
+			int i = this.inv.containsID(gun.ammoType);
+			
+			
+			
+			if(!((Ammo)this.inv.itemList.get(i)).isEmpty()) {
+				((Ammo) this.inv.itemList.get(i)).decrementCapacity(1);
+				focusedEnemy.takeDamage(gun.getAttack());
+				
+				world.gui.addToActionPanel(new PanelText("You shoot the " + focusedEnemy.name +" for " + gun.getAttack()));
+			} else {
+				world.gui.addToActionPanel(new PanelText("Out of Ammo!", Color.RED));
+			}
+			if(focusedEnemy.checkPlayerKill()) {
+				this.enemiesInRange.remove(index);
+				
+				updateEnemiesInRange();
+				
+				switchFocusRight();
+			}
+		} else {
+			world.gui.addToActionPanel(new PanelText("No ammo!"));
+		}
+		
+		world.gui.refresh();
+		world.app.repaint();
 
 	}
+	
 	
 	public void exitShooting() {
 		this.enemiesInRange.clear();
 		this.index = 0;
+		camera.renderCamera(this);
+	}
+	
+	public boolean inShootingMode() {
+		if(this.enemiesInRange.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	
