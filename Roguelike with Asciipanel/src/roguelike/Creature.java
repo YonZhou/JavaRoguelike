@@ -188,6 +188,7 @@ public class Creature extends Entity{
 	
 	//potential major problem of some enemies returning null? to check, erase the check on toavoid and remove the if == null because shouldnt be any null
 	public void moveOnMap() {
+		//TODO: always gives array out of bounds exception on first shoot, maybe because ai isn't rendered unless player moves?
 		if(l.player.ai.map[this.getx() - l.player.ai.topLeftX][this.gety() - l.player.ai.topLeftY] == null) {
 			moveRandom();
 			System.out.println(this.getx() + " + " + this.gety());

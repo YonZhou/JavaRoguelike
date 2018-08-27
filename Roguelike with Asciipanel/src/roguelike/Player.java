@@ -39,19 +39,22 @@ public class Player extends Creature{
 		
 		this.inv = new Inventory(5);
 		
-		this.inv.itemList.add(equippedWeapon);
-		
+		//this.inv.itemList.add(equippedWeapon);
+		resetInventory();
 		
 	}
 	
 	public void resetInventory() {
 		this.inv.clear();
-		this.inv.itemList.add(new Ammo("Standard rounds", 1, 1, 10, 1));
 		
+		
+		this.inv.itemList.add(new Ammo("Standard rounds", 1, 1, 10, 1));
 		this.inv.itemList.add(new Gold(1, 1, 999999, 0));
 		
 		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 1, 1);
 		this.inv.itemList.add(equippedWeapon);
+		
+
 	}
 	public void setWorld(World w) {
 		this.world = w;
@@ -180,7 +183,7 @@ public class Player extends Creature{
 	public void pickUpItem() {
 		if(checkForItem(this.x, this.y)) {
 			if(inv.itemList.size() < inv.maxInvSize) {
-				Item itempickedup = l.itemMap[this.x][this.y];
+				Item itempickedup = l.itemMap[this.x][this.y].get(0);
 				
 				
 				//need to fix this
@@ -364,8 +367,7 @@ public class Player extends Creature{
 		this.camera.renderCamera(focusedEnemy);
 		this.camera.drawLineToEntity(focusedEnemy);
 		
-		if(this.inv.containsID(gun.ammoType) > 0) {
-
+		if(this.inv.containsID(gun.ammoType) >= 0) {
 			
 			int i = this.inv.containsID(gun.ammoType);
 			

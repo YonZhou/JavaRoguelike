@@ -78,7 +78,7 @@ public class Camera{
 					
 					
 					if(l.itemMap[mapCheckX][mapCheckY] != null) {
-						p.write(l.itemMap[mapCheckX][mapCheckY].getID(),i ,j ,l.itemMap[mapCheckX][mapCheckY].getColor());
+						p.write(l.itemMap[mapCheckX][mapCheckY].get(0).getID(),i ,j ,l.itemMap[mapCheckX][mapCheckY].get(0).getColor());
 					}
 					
 					//check for enemies on the map and add them at subsequent locations(put in another function?)

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import Tiles.ExitTile;
+import Tiles.ItemTile;
 import Tiles.Tiles;
 import Tiles.WalkableTile;
 import Tiles.WallTile;
@@ -81,7 +82,7 @@ public class LevelGenerator {
 		generatedLevel.enemyMap = EnemyMap;
 		generatedLevel.enemyList = enemylist;
 		generatedLevel.itemList = new ArrayList<Item>();
-		generatedLevel.itemMap = new Item[width][height];
+		generatedLevel.itemMap = new ItemTile[width][height];
 		
 		generateCreatures(generatedLevel);
 		generateItems(generatedLevel);
@@ -295,22 +296,21 @@ public class LevelGenerator {
 			
 			int randomPlaceHolder = r.nextInt(100) + 1;
 			
-			if(randomPlaceHolder < 0) {
+			if(randomPlaceHolder < 5) {
 			
 				int swordLevel = r.nextInt(5) + 1;
 				
 				Sword sword = new Sword(x, y, swordLevel);
 				
 				level.itemList.add(sword);
-				level.itemMap[x][y] = sword;
+				level.addItem(sword,x,y);
 				
 			} else if (randomPlaceHolder < 11){
 				int potionLevel = r.nextInt(5) + 1;
-				
 				HealthPotion potion = new HealthPotion(x, y, potionLevel);
 				
 				level.itemList.add(potion);
-				level.itemMap[x][y] = potion;
+				level.addItem(potion, x, y);
 				
 			} else if(randomPlaceHolder < 31) {
 				int gunLevel = r.nextInt(5) + 1;
@@ -323,7 +323,7 @@ public class LevelGenerator {
 				}
 				
 				level.itemList.add(gun);
-				level.itemMap[x][y] = gun;
+				level.addItem(gun, x, y);
 			} else {
 				int ammoType = r.nextInt(3) + 1;
 				
@@ -332,7 +332,7 @@ public class LevelGenerator {
 				Ammo ammo = new Ammo("Ammo" + " type " + ammoType, x,y, capacity, ammoType);
 				
 				level.itemList.add(ammo);
-				level.itemMap[x][y] = ammo;
+				level.addItem(ammo, x, y);
 			}
 			
 			level.FreeTileList.remove(randomIndex);
