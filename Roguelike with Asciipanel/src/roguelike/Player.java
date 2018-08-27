@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import items.Ammo;
+import items.Gold;
 import items.Gun;
 import items.HealthPotion;
 import items.Item;
@@ -35,17 +36,23 @@ public class Player extends Creature{
 		this.enemiesInRange = new ArrayList<Entity>();
 		
 		//this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
-		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 1, 1);
 		
 		this.inv = new Inventory(5);
 		
 		this.inv.itemList.add(equippedWeapon);
 		
-		this.inv.itemList.add(new Ammo("Standard rounds", 1, 1, 10, 1));
 		
 	}
 	
-	
+	public void resetInventory() {
+		this.inv.clear();
+		this.inv.itemList.add(new Ammo("Standard rounds", 1, 1, 10, 1));
+		
+		this.inv.itemList.add(new Gold(1, 1, 999999, 0));
+		
+		this.equippedWeapon = new Gun("Starter Pistol", 1, 1, 1, 1);
+		this.inv.itemList.add(equippedWeapon);
+	}
 	public void setWorld(World w) {
 		this.world = w;
 	}
@@ -224,11 +231,9 @@ public class Player extends Creature{
 		this.health = BASE_HEALTH;
 		this.maxHealth = BASE_HEALTH;
 
-		this.inv.clear();
 		world.invScreen.clearTextList();
 		
-		this.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
-		this.inv.itemList.add(equippedWeapon);
+		resetInventory();
 		
 		this.isAlive = true;
 	}

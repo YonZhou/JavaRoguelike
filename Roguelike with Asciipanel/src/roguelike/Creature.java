@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.util.Random;
 
 import asciiPanel.AsciiPanel;
+import items.Gold;
 import items.Item;
 
 public class Creature extends Entity{
@@ -212,8 +213,10 @@ public class Creature extends Entity{
 		if(this.health > this.maxHealth) this.health = this.maxHealth;
 	}
 	
-	public Item drop() {
-		return null;
+	public Item CalculateDrop() {
+		Item C = new Gold(1,1,1, 1);
+		
+		return C;
 		
 	}
 

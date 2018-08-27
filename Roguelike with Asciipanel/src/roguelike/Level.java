@@ -15,7 +15,7 @@ public class Level {
 	public ArrayList<Creature> enemyList;
 	public Creature[][] enemyMap;
 	public ArrayList<Item> itemList;
-	public Item[][] itemMap;
+	public ArrayList<Item>[][] itemMap;
 	//public ArrayList<Level> levels; add this in another class
 	public Entity[][] Map;
 	public ArrayList<Entity> FreeTileList;
@@ -140,7 +140,14 @@ public class Level {
 	}
 	
 	public void deleteItem(int x, int y) {
-		Item itemtodelete = itemMap[x][y];
+		Item itemtodelete = itemMap[x][y].get(0);
+		
+		itemList.remove(itemtodelete);
+		itemMap[x][y] = null;
+	}
+	
+	public void deleteItem(int x, int y, int pos) {
+		Item itemtodelete = itemMap[x][y].get(pos);
 		
 		itemList.remove(itemtodelete);
 		itemMap[x][y] = null;
