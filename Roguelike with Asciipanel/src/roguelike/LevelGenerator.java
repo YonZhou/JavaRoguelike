@@ -12,6 +12,7 @@ import Tiles.WalkableTile;
 import Tiles.WallTile;
 import asciiPanel.AsciiPanel;
 import items.Ammo;
+import items.Gold;
 import items.Gun;
 import items.HealthPotion;
 import items.Item;
@@ -324,7 +325,7 @@ public class LevelGenerator {
 				
 				level.itemList.add(gun);
 				level.addItem(gun, x, y);
-			} else {
+			} else if (randomPlaceHolder < 71){
 				int ammoType = r.nextInt(3) + 1;
 				
 				int capacity = r.nextInt(50) + 1;
@@ -333,11 +334,22 @@ public class LevelGenerator {
 				
 				level.itemList.add(ammo);
 				level.addItem(ammo, x, y);
+
+			} else {
+				int capacity = r.nextInt(100) + 50;
+				Gold g = new Gold(x,y, 999999, capacity);
+				
+				level.itemList.add(g);
+				level.addItem(g, x, y);
 			}
 			
 			level.FreeTileList.remove(randomIndex);
 			
 		}
+	}
+	
+	public void generateShopLevel() {
+		
 	}
 	
 	public void smooth() {

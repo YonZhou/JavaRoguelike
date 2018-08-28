@@ -198,7 +198,7 @@ public class Player extends Creature{
 						this.inv.itemList.add(itempickedup);
 					}
 			
-					world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " x" + ((Ammo) itempickedup).Capacity , Color.YELLOW));
+					world.gui.addToActionPanel(new PanelText("You picked up the " + itempickedup.getName() + " x" + ((Stackable) itempickedup).getCapacity() , Color.YELLOW));
 
 				} else {
 					this.inv.itemList.add(itempickedup);
@@ -212,6 +212,7 @@ public class Player extends Creature{
 				world.gui.addToActionPanel(new PanelText("Full inventory space!", Color.RED));
 				world.gui.refresh();
 			}
+			
 			
 		} else {
 			world.gui.addToActionPanel(new PanelText("No Item!" , Color.ORANGE));
@@ -305,6 +306,11 @@ public class Player extends Creature{
 	}
 	
 	public void setupShoot() {
+		//bottom is solution? maybe update the map once earlier so don't need to call this every time
+		// added this to "fix" not moving and shooting since ai map isnt updated until player moves
+		this.ai.updateMap();
+		
+		
 		updateEnemiesInRange();
 		this.index = 0;
 		
@@ -394,7 +400,6 @@ public class Player extends Creature{
 		
 		
 		world.gui.refresh();
-		world.app.repaint();
 	}
 	
 	

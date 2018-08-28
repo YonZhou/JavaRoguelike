@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import asciiPanel.AsciiPanel;
 import items.*;
+import roguelike.Creature;
 import roguelike.PanelText;
 import roguelike.Player;
 import roguelike.World;
@@ -17,10 +18,12 @@ public class InventoryScreen extends MenuScreen{
 	public ArrayList<Item> itemList;
 	public World w;
 	private AsciiPanel panel;
+	public Player p;
 	
 	public InventoryScreen(World w) {
 		this.w = w;
-		this.itemList = w.p.inv.itemList;
+		this.p = w.p;
+		this.itemList = p.inv.itemList;
 		this.panel = w.app.getTerminal();	
 		
 		this.textList = new ArrayList<PanelText>();
@@ -29,7 +32,7 @@ public class InventoryScreen extends MenuScreen{
 		this.topLeftY = (int) w.gui.topLeftY;
 		
 		this.width = (int) w.app.TERMINAL_WIDTH / 4;
-		this.height = w.p.camera.height - 1;
+		this.height = p.camera.height - 1;
 		
 	}
 	
@@ -98,14 +101,14 @@ public class InventoryScreen extends MenuScreen{
 			Item item = itemList.get(textIndex);
 			
 			if(item instanceof Weapon) {
-				if(w.p.inShootingMode()) {
+				if(p.inShootingMode()) {
 					w.gui.addToActionPanel(new PanelText("Cannot switch weapons while in shooting mode!"));
 				} else {
-					w.p.equippedWeapon = (Weapon) item;
+					p.equippedWeapon = (Weapon) item;
 					w.gui.addToActionPanel(new PanelText("You equipped the "+ textList.get(textIndex).text, Color.PINK));
 				}
 			} else if (item instanceof HealthPotion) {
-				w.p.use(item);
+				p.use(item);
 			}
 			
 		}
@@ -132,19 +135,25 @@ public class InventoryScreen extends MenuScreen{
 		
 		if(textList.size() > 0) {
 			
-			if(itemList.get(textIndex) == w.p.equippedWeapon) {
-				if(w.p.inShootingMode()) {
+			Item i = itemList.get(textIndex);
+			
+			if(i == p.equippedWeapon) {
+				if(p.inShootingMode()) {
 					w.gui.addToActionPanel(new PanelText("Can't unequip gun while in shooting mode!"));
 				} else {
-					w.p.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
+					p.equippedWeapon = new Weapon("Fists", '3', 0, 0, Color.BLACK);
 					w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
+					
+					
 					textList.remove(textIndex);
 					itemList.remove(textIndex);
+					p.dropItemToMap(i);
 				}
 			} else {
 				w.gui.addToActionPanel(new PanelText("You dropped the " + textList.get(textIndex).text, Color.PINK));
 				textList.remove(textIndex);
 				itemList.remove(textIndex);
+				p.dropItemToMap(i);
 			}
 			
 			
@@ -164,6 +173,8 @@ public class InventoryScreen extends MenuScreen{
 		displayScreen();
 	
 	}
+	
+
 	
 	public void useItem() {
 		w.gui.addToActionPanel(new PanelText("You used the " + textList.get(textIndex).text, Color.PINK));

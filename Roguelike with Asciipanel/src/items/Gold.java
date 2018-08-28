@@ -8,6 +8,7 @@ public class Gold extends Stackable{
 		super("Gold", '.', x, y, Color.YELLOW);
 		this.Capacity = C;
 		this.MaxCapacity = maxC;
+		super.setItemID(0);
 	}
 
 }

@@ -3,6 +3,7 @@ package roguelike;
 import java.util.ArrayList;
 
 import items.Item;
+import items.Stackable;
 import items.Weapon;
 
 public class Inventory {
@@ -29,8 +30,9 @@ public class Inventory {
 //	}
 	
 	public int containsID(int i) {
+		
 		for(int j=0; j < itemList.size(); j++) {
-			if(i == itemList.get(j).getItemID()) {
+			if(itemList.get(j) instanceof Stackable && i == itemList.get(j).getItemID()) {
 				return j;
 			}
 		}

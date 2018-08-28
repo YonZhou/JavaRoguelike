@@ -220,6 +220,10 @@ public class Creature extends Entity{
 		return C;
 		
 	}
+	
+	public void dropItemToMap(Item i) {
+		this.l.addItem(i,this.x,this.y);
+	}
 
 	
 

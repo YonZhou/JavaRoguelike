@@ -22,5 +22,9 @@ public class Item extends Entity{
 		return this.ID;
 	}
 	
+	public void setItemID(int i) {
+		this.ID = i;
+	}
+	
 
 }
