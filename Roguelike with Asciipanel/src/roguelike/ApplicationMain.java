@@ -22,7 +22,7 @@ public class ApplicationMain extends JFrame{
     
     public ApplicationMain() {
 	    //super();
-	    setTerminal(new AsciiPanel(TERMINAL_WIDTH,TERMINAL_HEIGHT,AsciiFont.TALRYTH_15_15));
+	    setTerminal(new AsciiPanel(TERMINAL_WIDTH,TERMINAL_HEIGHT,AsciiFont.CP437_12x12));
 	    
 	    
 	    // world.setBoundDimensions(1000, 1000, TERMINAL_WIDTH, TERMINAL_HEIGHT);

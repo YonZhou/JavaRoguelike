@@ -196,56 +196,56 @@ public class LevelGenerator {
 	}
 	
 	
-	public Rectangle generateRectangle(Entity[][] fullmap, ArrayList<Tiles> tilelist, int topLeftX, int topLeftY, int Width, int Height) {
-		int i = topLeftX;
-		int j = topLeftY;
-		//create the top
-		while(i < Width) {
-			fullmap[i][j] = new WallTile(i, j);
-			tilelist.add((Tiles) fullmap[i][j]);
-			i++;
-		}
-		
-		//create the bottom
-		j = topLeftY + Height - 1;
-		i = topLeftX;
-		
-		while(i < Width) {
-			fullmap[i][j] = new WallTile(i, j);
-			tilelist.add((Tiles) fullmap[i][j]);
-			i++;
-		}
-		
-		//create the left
-		i = topLeftX;
-		j = topLeftY;
-		
-		while(j < topLeftY + Height) {
-			fullmap[i][j] = new WallTile(i, j);
-			tilelist.add((Tiles) fullmap[i][j]);
-			j++;
-		}
-		
-		//create the right
-		i = topLeftX + Width - 1;
-		j = topLeftY;
-		
-		while(j < topLeftY + height) {
-			fullmap[i][j] = new WallTile(i, j);
-			tilelist.add((Tiles) fullmap[i][j]);
-			j++;
-		}
-		
-		Rectangle r = new Rectangle(topLeftX, topLeftY, Width, Height);
-		rectangleList.add(r);
-		return r;
-	
-	}
-	
-	public void generateEMPTY() {
-		Rectangle main = generateRectangle(map, tileslist, 0, 0, width, height);
-		fillRectangle(main);
-	}
+//	public Rectangle generateRectangle(Entity[][] fullmap, ArrayList<Tiles> tilelist, int topLeftX, int topLeftY, int Width, int Height) {
+//		int i = topLeftX;
+//		int j = topLeftY;
+//		//create the top
+//		while(i < Width) {
+//			fullmap[i][j] = new WallTile(i, j);
+//			tilelist.add((Tiles) fullmap[i][j]);
+//			i++;
+//		}
+//		
+//		//create the bottom
+//		j = topLeftY + Height - 1;
+//		i = topLeftX;
+//		
+//		while(i < Width) {
+//			fullmap[i][j] = new WallTile(i, j);
+//			tilelist.add((Tiles) fullmap[i][j]);
+//			i++;
+//		}
+//		
+//		//create the left
+//		i = topLeftX;
+//		j = topLeftY;
+//		
+//		while(j < topLeftY + Height) {
+//			fullmap[i][j] = new WallTile(i, j);
+//			tilelist.add((Tiles) fullmap[i][j]);
+//			j++;
+//		}
+//		
+//		//create the right
+//		i = topLeftX + Width - 1;
+//		j = topLeftY;
+//		
+//		while(j < topLeftY + height) {
+//			fullmap[i][j] = new WallTile(i, j);
+//			tilelist.add((Tiles) fullmap[i][j]);
+//			j++;
+//		}
+//		
+//		Rectangle r = new Rectangle(topLeftX, topLeftY, Width, Height);
+//		rectangleList.add(r);
+//		return r;
+//	
+//	}
+//	
+//	public void generateEMPTY() {
+//		Rectangle main = generateRectangle(map, tileslist, 0, 0, width, height);
+//		fillRectangle(main);
+//	}
 	
 	//put this function after the parse, as it needs to find an empty walkabletile on the TILELIST.
 	public void generateExitTile(Entity[][] map, ArrayList<Tiles> tilelist, ArrayList<Entity> freetilelist) {
@@ -268,15 +268,15 @@ public class LevelGenerator {
 		tilelist.set(randomIndex, exit);
 	}
 	
-	public void fillRectangle(Rectangle r) {
-		for(int w = r.topLeftX + 1; w < r.width - 1; w++) {
-			for(int h = r.topLeftY + 1; h < r.height - 1; h++) {
-				map[w][h] = new WalkableTile(w, h);
-				tileslist.add((Tiles) map[w][h]);
-//				walkabletileslist.add((WalkableTile) map[w][h]);
-			}
-		}
-	}
+//	public void fillRectangle(Rectangle r) {
+//		for(int w = r.topLeftX + 1; w < r.width - 1; w++) {
+//			for(int h = r.topLeftY + 1; h < r.height - 1; h++) {
+//				map[w][h] = new WalkableTile(w, h);
+//				tileslist.add((Tiles) map[w][h]);
+////				walkabletileslist.add((WalkableTile) map[w][h]);
+//			}
+//		}
+//	}
 	
 	public void generateItems(Level level) {
 		Random r = new Random();
